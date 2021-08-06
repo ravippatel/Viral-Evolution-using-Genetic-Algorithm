@@ -17,7 +17,7 @@ public class StartUpFrame extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> new StartUpFrame().setVisible(true));
     }
 
-    private void populationFrameActionPerformed(java.awt.event.ActionEvent evt) {
+    private void showPopulationGraph() {
         if (!javaFxLaunched) {
             Platform.setImplicitExit(false);
             new Thread(() -> Application.launch(PopulationGraph.class)).start();
@@ -33,13 +33,13 @@ public class StartUpFrame extends javax.swing.JFrame {
                 }
             });
         }
-        simulation.Populate.GUI.demo();
+        simulation.Populate.GUI.start();
     }
     private void initComponents() {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         pack();
-        populationFrameActionPerformed(null);
+        showPopulationGraph();
     }
 }
