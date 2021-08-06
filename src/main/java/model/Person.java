@@ -3,19 +3,13 @@ package model;
 import java.util.Random;
 
 public class Person {
-    private final int infected_duration = 140;
+    public PersonStatus status=PersonStatus.NAIVE;
     private final Random random = new Random();
     public int x;
     public int y;
-    public boolean immune = false;
-    public boolean died = false;
     public boolean can_move = true;
-    public int infected = 0;
-    public int no_of_person_infected = 0;
     private int vel_x = 0;
     private int vel_y = 0;
-    private int height = 600;
-    private int width = 800;
 
     public Person(int x, int y) {
         this.x = x;
@@ -28,9 +22,11 @@ public class Person {
         if (can_move) {
             x += vel_x;
             y += vel_y;
+            int width = 800;
             if (x > width || x < 0) {
                 vel_x = -vel_x;
             }
+            int height = 600;
             if (y > height || y < 0) {
                 vel_y = -vel_y;
             }
