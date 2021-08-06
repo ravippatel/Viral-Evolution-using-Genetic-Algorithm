@@ -1,8 +1,9 @@
 package simulation.StartUp;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.stage.Stage;
-import jdk.tools.jlink.internal.Platform;
+//import jdk.tools.jlink.internal.Platform;
 import simulation.Populate.PopulationGraph;
 
 public class StartUpFrame extends javax.swing.JFrame {

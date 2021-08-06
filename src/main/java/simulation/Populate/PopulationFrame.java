@@ -1,6 +1,6 @@
 package simulation.Populate;
 
-import POJO.Person;
+import model.Person;
 
 import javax.swing.*;
 import java.awt.*;
