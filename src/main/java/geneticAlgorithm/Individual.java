@@ -28,7 +28,7 @@ public class Individual {
 
             fitness = 0;
             for (int i = 0; i < 10; i++) {
-                if (genes[i] == 71) {
+                if (genes[i] == 84) {
                     ++fitness;
                 }
             }

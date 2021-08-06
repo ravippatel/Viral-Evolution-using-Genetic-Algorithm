@@ -1,4 +1,4 @@
-package POJO;
+package model;
 
 import java.util.Random;
 
