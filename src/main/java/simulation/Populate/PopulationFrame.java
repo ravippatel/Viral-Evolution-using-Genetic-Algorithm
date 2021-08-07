@@ -1,5 +1,7 @@
 package simulation.Populate;
 
+import geneticAlgorithm.GeneticAlgorithm;
+import geneticAlgorithm.Virus;
 import model.Person;
 import model.PersonStatus;
 
@@ -19,7 +21,7 @@ public class PopulationFrame extends JPanel implements ActionListener {
 
     private final Person[] p = new Person[population];
 
-    private final int Dots_Size = 10;
+    private final int Dots_Size = 20;
     private final int infectDistance = 10;
 
     private final int DISTANCE_FOR_INFECTION = 10;
@@ -28,6 +30,7 @@ public class PopulationFrame extends JPanel implements ActionListener {
     private final int width;
 
     private final Random gen = new Random();
+    private int virusFitness = getNewVariant().getFitness();
     private final simulation.Populate.PopulationGraph PopulationGraph = new PopulationGraph();
 
 
@@ -39,6 +42,8 @@ public class PopulationFrame extends JPanel implements ActionListener {
             int x = gen.nextInt(width);
             int y = gen.nextInt(height);
             p[i] = new Person(x, y);
+            p[i].fitness = getRandomFitness(500, 700);
+            p[i].gene = getRandomGenoType();
         }
         p[0].status = PersonStatus.INFECTED;
         TM.start();
@@ -56,11 +61,14 @@ public class PopulationFrame extends JPanel implements ActionListener {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         for (int i = 0; i < population; i++) {
-            if(p[i].status== PersonStatus.INFECTED){
-                g.setColor(Color.red);
-            }else{
-                g.setColor(Color.gray);
-
+            if(p[i].fitness <= 550){
+                g.setColor(Color.BLUE);
+            }else if(p[i].fitness <= 600){
+                g.setColor(Color.blue.darker());
+            } else if(p[i].fitness <= 650){
+                g.setColor(Color.blue.darker().darker());
+            }else if(p[i].fitness <= 700){
+                g.setColor(Color.blue.darker().darker().darker());
             }
             g.fillOval(p[i].x, p[i].y, Dots_Size, Dots_Size);
         }
@@ -69,7 +77,7 @@ public class PopulationFrame extends JPanel implements ActionListener {
     public int infected(){
         int infected = 0;
         for(int i=0; i<population; i++){
-            if(p[i].status== PersonStatus.INFECTED){
+            if(p[i].fitness < virusFitness){
                 infected++;
             }
         }
@@ -80,7 +88,22 @@ public class PopulationFrame extends JPanel implements ActionListener {
         for(int i=0;i<population;i++){
             p[i].move();
         }
-        PopulationGraph.showChartWithLockDown (infected(), population);
+        PopulationGraph.showChartVirusEvolution (infected(), population);
         repaint();
+    }
+
+    public int getRandomFitness(int min, int max) {
+        Random random = new Random();
+        return random.nextInt(max - min) + min;
+    }
+
+    public String getRandomGenoType() {
+        String[] geneType = {"A1", "A2", "B1", "B2"};
+        int randIdx = new Random().nextInt(4);
+        return geneType[randIdx];
+    }
+
+    public Virus getNewVariant() {
+        return  GeneticAlgorithm.runGA();
     }
 }
