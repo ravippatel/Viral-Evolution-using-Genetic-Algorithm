@@ -19,12 +19,11 @@ public class Virus {
                 char randChar = geneType.charAt(randIdx);
                 genes[i] = randChar;
             }
-
-            fitness = 0;
         }
 
         //Calculate fitness
         public void calcFitness() {
+            this.fitness = 0;
             for (int i = 0; i < 10; i++) {
                 if (genes[i] == 84) {
                     this.fitness += genes[i];

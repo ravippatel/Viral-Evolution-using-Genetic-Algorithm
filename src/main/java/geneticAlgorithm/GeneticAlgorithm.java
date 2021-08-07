@@ -9,11 +9,6 @@ public class GeneticAlgorithm {
     private Virus secondFittest;
     private int generationCount = 0;
 
-//    public static void main(String[] args) {
-//        this.runGA();
-//
-//    }
-
     //Selection
     void selection() {
 
@@ -50,9 +45,9 @@ public class GeneticAlgorithm {
 
         //Flip values at the mutation point
         if (fittest.genes[mutationPoint] == 71) {
-            fittest.genes[mutationPoint] = 'A';
+            fittest.genes[mutationPoint] = 'G';
         } else {
-            fittest.genes[mutationPoint] = 'T';
+            fittest.genes[mutationPoint] = 'C';
         }
 
         mutationPoint = rn.nextInt(virusPopulation.viruses[0].geneLength);
@@ -60,7 +55,7 @@ public class GeneticAlgorithm {
         if (secondFittest.genes[mutationPoint] == 65) {
             secondFittest.genes[mutationPoint] = 'T';
         } else {
-            secondFittest.genes[mutationPoint] = 'G';
+            secondFittest.genes[mutationPoint] = 'A';
         }
     }
 
@@ -110,7 +105,7 @@ public class GeneticAlgorithm {
         System.out.println("Generation: " + demo.generationCount + " Fittest: " + demo.virusPopulation.fittest);
 
         //While population gets an individual with maximum fitness
-        while (demo.virusPopulation.fittest < 600) {
+        while (demo.virusPopulation.fittest < 500) {
             ++demo.generationCount;
 
             //Do selection

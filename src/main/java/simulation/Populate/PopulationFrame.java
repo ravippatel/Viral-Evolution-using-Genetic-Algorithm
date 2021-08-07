@@ -30,7 +30,7 @@ public class PopulationFrame extends JPanel implements ActionListener {
     private final int width;
 
     private final Random gen = new Random();
-    private int virusFitness = getNewVariant().getFitness();
+    private int virusFitness = 0;
     private final simulation.Populate.PopulationGraph PopulationGraph = new PopulationGraph();
 
 
@@ -45,6 +45,7 @@ public class PopulationFrame extends JPanel implements ActionListener {
             p[i].fitness = getRandomFitness(500, 700);
             p[i].gene = getRandomGenoType();
         }
+        virusFitness = getNewVariant().getFitness();
         p[0].status = PersonStatus.INFECTED;
         TM.start();
     }
@@ -105,5 +106,22 @@ public class PopulationFrame extends JPanel implements ActionListener {
 
     public Virus getNewVariant() {
         return  GeneticAlgorithm.runGA();
+    }
+
+    public void vaccinateHostPopulation() {
+        for(Person x: p) {
+            if(x.fitness < 600) {
+                x.vaccinated = true;
+                x.fitness += 89;
+            }
+        }
+    }
+
+    public void recoveredHostPopulation() {
+        for(Person x: p) {
+            if(x.fitness >= 650 && x.fitness <= 700) {
+                x.recovered = true;
+            }
+        }
     }
 }
