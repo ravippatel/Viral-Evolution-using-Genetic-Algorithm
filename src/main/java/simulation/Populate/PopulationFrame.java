@@ -30,7 +30,9 @@ public class PopulationFrame extends JPanel implements ActionListener {
     private final int width;
 
     private final Random gen = new Random();
-    private int virusFitness = 0;
+    private int firstNewVariantFitness = 0;
+    private int secondNewVariantFitness = 0;
+    private Virus firstNewVariant;
     private final simulation.Populate.PopulationGraph PopulationGraph = new PopulationGraph();
 
 
@@ -45,7 +47,9 @@ public class PopulationFrame extends JPanel implements ActionListener {
             p[i].fitness = getRandomFitness(500, 700);
             p[i].gene = getRandomGenoType();
         }
-        virusFitness = getNewVariant().getFitness();
+        firstNewVariant = getNewVariant(null);
+        firstNewVariantFitness = firstNewVariant.getFitness();
+        secondNewVariantFitness = getNewVariant(firstNewVariant).getFitness();
         p[0].status = PersonStatus.INFECTED;
         TM.start();
     }
@@ -63,13 +67,21 @@ public class PopulationFrame extends JPanel implements ActionListener {
         super.paintComponent(g);
         for (int i = 0; i < population; i++) {
             if(p[i].fitness <= 550){
-                g.setColor(Color.BLUE);
-            }else if(p[i].fitness <= 600){
-                g.setColor(Color.blue.darker());
+                g.setColor(Color.gray);
+            } else if(p[i].fitness <= 600){
+                g.setColor(Color.gray.darker());
             } else if(p[i].fitness <= 650){
-                g.setColor(Color.blue.darker().darker());
-            }else if(p[i].fitness <= 700){
-                g.setColor(Color.blue.darker().darker().darker());
+                g.setColor(Color.gray.darker().darker());
+            } else if(p[i].fitness <= 700){
+                g.setColor(Color.gray.darker().darker().darker());
+            }
+
+            if(p[i].infected && p[i].fitness <= 600){
+                g.setColor(Color.red);
+            }
+
+            if(p[i].infected && p[i].fitness <= firstNewVariantFitness){
+                g.setColor(Color.orange);
             }
             g.fillOval(p[i].x, p[i].y, Dots_Size, Dots_Size);
         }
@@ -78,7 +90,7 @@ public class PopulationFrame extends JPanel implements ActionListener {
     public int infected(){
         int infected = 0;
         for(int i=0; i<population; i++){
-            if(p[i].fitness < virusFitness){
+            if(p[i].fitness < firstNewVariantFitness){
                 infected++;
             }
         }
@@ -89,7 +101,8 @@ public class PopulationFrame extends JPanel implements ActionListener {
         for(int i=0;i<population;i++){
             p[i].move();
         }
-        PopulationGraph.showChartVirusEvolution (infected(), population);
+        checkDistance();
+        PopulationGraph.showChartVirusEvolution(infected(), population);
         repaint();
     }
 
@@ -104,8 +117,8 @@ public class PopulationFrame extends JPanel implements ActionListener {
         return geneType[randIdx];
     }
 
-    public Virus getNewVariant() {
-        return  GeneticAlgorithm.runGA();
+    public Virus getNewVariant(Virus previousVariant) {
+        return  GeneticAlgorithm.runGA(previousVariant);
     }
 
     public void vaccinateHostPopulation() {
@@ -121,6 +134,25 @@ public class PopulationFrame extends JPanel implements ActionListener {
         for(Person x: p) {
             if(x.fitness >= 650 && x.fitness <= 700) {
                 x.recovered = true;
+            }
+        }
+    }
+
+    public void checkDistance() {
+        // compare each point to all the other points
+        for(int i=0;i<population;i++) {
+            for(int j=i+1;j<population;j++) {
+                int deltax = p[i].x - p[j].x;
+                int deltay = p[i].y - p[j].y;
+                double dist = Math.sqrt(deltax*deltax+deltay*deltay);
+                // if the distance between 2 points is small enough, and one of
+                // the Persons is infected, then infect the other Person
+                if (dist < infectDistance) {
+                    if (p[i].fitness <= 500 ) {
+                        p[j].infected = true;
+                    }
+
+                }
             }
         }
     }

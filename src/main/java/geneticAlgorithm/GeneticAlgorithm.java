@@ -91,10 +91,12 @@ public class GeneticAlgorithm {
         this.generationCount = generationCount;
     }
 
-    public static Virus runGA() {
+    public static Virus runGA(Virus previousGen) {
         Random rn = new Random();
 
         GeneticAlgorithm demo = new GeneticAlgorithm();
+
+        int gaFitness = previousGen != null ? previousGen.getFitness() : 500;
 
         //Initialize population
         demo.virusPopulation.initializePopulation(1000);
@@ -105,7 +107,7 @@ public class GeneticAlgorithm {
         System.out.println("Generation: " + demo.generationCount + " Fittest: " + demo.virusPopulation.fittest);
 
         //While population gets an individual with maximum fitness
-        while (demo.virusPopulation.fittest < 500) {
+        while (demo.virusPopulation.fittest < gaFitness) {
             ++demo.generationCount;
 
             //Do selection

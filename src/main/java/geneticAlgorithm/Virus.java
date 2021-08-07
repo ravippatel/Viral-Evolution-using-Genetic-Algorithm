@@ -11,8 +11,6 @@ public class Virus {
 
         public Virus() {
 
-            Random rn = new Random();
-
             //Set genes randomly for each individual
             for (int i = 0; i < genes.length; i++) {
                 int randIdx = new Random().nextInt(geneType.length());

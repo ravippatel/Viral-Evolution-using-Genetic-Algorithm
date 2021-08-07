@@ -14,6 +14,7 @@ public class Person {
     public String gene = "";
     public boolean vaccinated = false;
     public boolean recovered = false;
+    public boolean infected = false;
 
     public Person(int x, int y) {
         this.x = x;
