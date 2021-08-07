@@ -25,7 +25,7 @@ public class PopulationGraph extends Application {
     Text text = new Text();
     private Scene scene;
 
-    public void showChartWithLockDown(int infected, int population) {
+    public void showChartVirusEvolution(int infected, int population) {
         Platform.runLater(() -> {
             System.out.println("Infected: " + infected);
             Date now = new Date();

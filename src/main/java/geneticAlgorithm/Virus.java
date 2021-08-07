@@ -2,16 +2,14 @@ package geneticAlgorithm;
 
 import java.util.Random;
 
-public class Individual {
+public class Virus {
 
-        int fitness = 0;
+        private int fitness = 0;
         String geneType = "ACGT";
         char[] genes = new char[10];
         int geneLength = 10;
 
-        public Individual() {
-
-            Random rn = new Random();
+        public Virus() {
 
             //Set genes randomly for each individual
             for (int i = 0; i < genes.length; i++) {
@@ -19,19 +17,23 @@ public class Individual {
                 char randChar = geneType.charAt(randIdx);
                 genes[i] = randChar;
             }
-
-            fitness = 0;
         }
 
         //Calculate fitness
         public void calcFitness() {
-
-            fitness = 0;
+            this.fitness = 0;
             for (int i = 0; i < 10; i++) {
                 if (genes[i] == 84) {
-                    ++fitness;
+                    this.fitness += genes[i];
                 }
             }
         }
 
+    public int getFitness() {
+        return fitness;
+    }
+
+    public void setFitness(int fitness) {
+        this.fitness = fitness;
+    }
 }
