@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLOutput;
 import java.util.Random;
 
 public class PopulationFrame extends JPanel implements ActionListener {
@@ -21,10 +22,11 @@ public class PopulationFrame extends JPanel implements ActionListener {
 
     private final Person[] p = new Person[population];
 
-    private final int Dots_Size = 20;
+    private final int Dots_Size = 10;
     private final int infectDistance = 10;
 
     private final int DISTANCE_FOR_INFECTION = 10;
+    private static int total_days=0;
 
     private final int height;
     private final int width;
@@ -44,13 +46,15 @@ public class PopulationFrame extends JPanel implements ActionListener {
             int x = gen.nextInt(width);
             int y = gen.nextInt(height);
             p[i] = new Person(x, y);
-            p[i].fitness = getRandomFitness(500, 700);
+            p[i].actual_fitness = getRandomFitness(500, 700);
+            p[i].fitness=p[i].actual_fitness;
             p[i].gene = getRandomGenoType();
         }
         firstNewVariant = getNewVariant(null);
         firstNewVariantFitness = firstNewVariant.getFitness();
         secondNewVariantFitness = getNewVariant(firstNewVariant).getFitness();
         p[0].status = PersonStatus.INFECTED;
+        p[0].no_infected_days=1;
         TM.start();
     }
 
@@ -83,26 +87,54 @@ public class PopulationFrame extends JPanel implements ActionListener {
             if(p[i].infected && p[i].fitness <= firstNewVariantFitness){
                 g.setColor(Color.orange);
             }
+            if(p[i].recovered){
+                g.setColor(Color.magenta);
+            }
+            if(p[i].vaccinated)
+            {
+                g.setColor(Color.pink);
+            }
+            if(p[i].died)
+            {
+                g.setColor(Color.BLUE);
+            }
+            if(p[i].second_variant && p[i].vaccinated && p[i].fitness<secondNewVariantFitness)
+            {
+                g.setColor(Color.CYAN);
+            }
+
+
             g.fillOval(p[i].x, p[i].y, Dots_Size, Dots_Size);
+
         }
     }
-
     public int infected(){
         int infected = 0;
         for(int i=0; i<population; i++){
-            if(p[i].fitness < firstNewVariantFitness){
+            if(p[i].infected){
                 infected++;
+            }
+            if(p[i].recovered){
+                infected--;
             }
         }
         return infected;
     }
     @Override
     public void actionPerformed(ActionEvent e) {
+        total_days++;
         for(int i=0;i<population;i++){
             p[i].move();
+            p[i].checkForImmunity();
+            if(total_days>2000)
+            {
+               p[i].second_variant=true;
+            }
         }
         checkDistance();
         PopulationGraph.showChartVirusEvolution(infected(), population);
+        System.out.println("days="+(total_days));
+
         repaint();
     }
 
@@ -121,22 +153,6 @@ public class PopulationFrame extends JPanel implements ActionListener {
         return  GeneticAlgorithm.runGA(previousVariant);
     }
 
-    public void vaccinateHostPopulation() {
-        for(Person x: p) {
-            if(x.fitness < 600) {
-                x.vaccinated = true;
-                x.fitness += 89;
-            }
-        }
-    }
-
-    public void recoveredHostPopulation() {
-        for(Person x: p) {
-            if(x.fitness >= 650 && x.fitness <= 700) {
-                x.recovered = true;
-            }
-        }
-    }
 
     public void checkDistance() {
         // compare each point to all the other points
@@ -150,7 +166,10 @@ public class PopulationFrame extends JPanel implements ActionListener {
                 if (dist < infectDistance) {
                     if (p[i].fitness <= 500 ) {
                         p[j].infected = true;
+//                        p[i].no_infected_days++;
+                        p[j].no_infected_days++;
                     }
+
 
                 }
             }
