@@ -15,7 +15,6 @@ public class StartUpFrame extends javax.swing.JFrame {
 
     private void showPopulationGraph() {
         new Thread(() -> Application.launch(PopulationGraph.class)).start();
-        //new Thread(()-> Application.launch(FitnessGenerationGraph.class)).start();
         GUI.start();
     }
 

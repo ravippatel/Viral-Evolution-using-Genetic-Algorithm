@@ -1,5 +1,7 @@
 package model;
 
+import config.Helper;
+
 import java.util.Random;
 
 public class Person {
@@ -35,11 +37,11 @@ public class Person {
         if (can_move) {
             x += vel_x;
             y += vel_y;
-            int width = 1000;
+            int width = Helper.getWidth();
             if (x > width || x < 0) {
                 vel_x = -vel_x;
             }
-            int height = 800;
+            int height = Helper.getHeight();
             if (y > height || y < 0) {
                 vel_y = -vel_y;
             }
@@ -65,7 +67,7 @@ public class Person {
             second_variant=true;
         }
         if(immune){
-            if(immune_days++==42)
+            if(immune_days++==70)
                 vaccinateHostPopulation();
         }
         if(total_days>1500 && !infected)

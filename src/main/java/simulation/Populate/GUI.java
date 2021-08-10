@@ -1,6 +1,6 @@
 package simulation.Populate;
 
-import util.Helper;
+import config.Helper;
 
 import javax.swing.*;
 
