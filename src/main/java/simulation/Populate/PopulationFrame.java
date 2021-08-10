@@ -12,7 +12,6 @@ import java.awt.event.ActionListener;
 import java.util.Random;
 
 public class PopulationFrame extends JPanel implements ActionListener {
-
     private final Timer TM = new Timer(100, this);
 
     private int population = 1000;
@@ -33,13 +32,15 @@ public class PopulationFrame extends JPanel implements ActionListener {
     private int firstNewVariantFitness = 0;
     private int secondNewVariantFitness = 0;
     private Virus firstNewVariant;
-    private final simulation.Populate.PopulationGraph PopulationGraph = new PopulationGraph();
+    private final PopulationGraph populationGraph = new PopulationGraph();
 
+    private final GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
 
-    public PopulationFrame(int height, int width) {
+    public PopulationFrame(int width, int height) {
         this.width = width;
         this.height = height;
         setPreferredSize(new Dimension(width, height));
+
         for (int i = 0; i < population; i++) {
             int x = gen.nextInt(width);
             int y = gen.nextInt(height);
@@ -47,6 +48,7 @@ public class PopulationFrame extends JPanel implements ActionListener {
             p[i].fitness = getRandomFitness(500, 700);
             p[i].gene = getRandomGenoType();
         }
+
         firstNewVariant = getNewVariant(null);
         firstNewVariantFitness = firstNewVariant.getFitness();
         secondNewVariantFitness = getNewVariant(firstNewVariant).getFitness();
@@ -77,14 +79,21 @@ public class PopulationFrame extends JPanel implements ActionListener {
             }
 
             if(p[i].infected && p[i].fitness <= 600){
+                g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
                 g.setColor(Color.red);
+                g.drawString("Generation 1",50,50);
+
             }
 
             if(p[i].infected && p[i].fitness <= firstNewVariantFitness){
+                g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
                 g.setColor(Color.orange);
+                g.drawString("Generation 2",250,50);
+
             }
             g.fillOval(p[i].x, p[i].y, Dots_Size, Dots_Size);
         }
+
     }
 
     public int infected(){
@@ -96,13 +105,14 @@ public class PopulationFrame extends JPanel implements ActionListener {
         }
         return infected;
     }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         for(int i=0;i<population;i++){
             p[i].move();
         }
         checkDistance();
-        PopulationGraph.showChartVirusEvolution(infected(), population);
+        populationGraph.showChartVirusEvolution(infected(), population);
         repaint();
     }
 
@@ -118,7 +128,7 @@ public class PopulationFrame extends JPanel implements ActionListener {
     }
 
     public Virus getNewVariant(Virus previousVariant) {
-        return  GeneticAlgorithm.runGA(previousVariant);
+        return  geneticAlgorithm.runGA(previousVariant, populationGraph);
     }
 
     public void vaccinateHostPopulation() {

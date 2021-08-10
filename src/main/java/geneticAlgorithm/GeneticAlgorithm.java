@@ -1,5 +1,9 @@
 package geneticAlgorithm;
 
+import simulation.Populate.PopulationGraph;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class GeneticAlgorithm {
@@ -8,6 +12,14 @@ public class GeneticAlgorithm {
     private Virus fittest;
     private Virus secondFittest;
     private int generationCount = 0;
+
+    private List<Integer> generationFitnessList = new ArrayList<>();
+
+    //private final FitnessGenerationGraph fitnessGenerationGraph = new FitnessGenerationGraph();
+
+    public GeneticAlgorithm(){
+        //new Thread(() -> Application.launch(FitnessGenerationGraph.class)).start();
+    }
 
     //Selection
     void selection() {
@@ -91,54 +103,58 @@ public class GeneticAlgorithm {
         this.generationCount = generationCount;
     }
 
-    public static Virus runGA(Virus previousGen) {
+    public Virus runGA(Virus previousGen, PopulationGraph populationGraph) {
         Random rn = new Random();
 
-        GeneticAlgorithm demo = new GeneticAlgorithm();
+        //GeneticAlgorithm demo = new GeneticAlgorithm();
 
         int gaFitness = previousGen != null ? previousGen.getFitness() : 500;
 
         //Initialize population
-        demo.virusPopulation.initializePopulation(1000);
+        virusPopulation.initializePopulation(1000);
 
         //Calculate fitness of each individual
-        demo.virusPopulation.calculateFitness();
+        virusPopulation.calculateFitness();
 
-        System.out.println("Generation: " + demo.generationCount + " Fittest: " + demo.virusPopulation.fittest);
+        System.out.println("Generation: " + generationCount + " Fittest: " + virusPopulation.fittest);
 
+        generationFitnessList.add(virusPopulation.fittest);
         //While population gets an individual with maximum fitness
-        while (demo.virusPopulation.fittest < gaFitness) {
-            ++demo.generationCount;
+        while (virusPopulation.fittest < gaFitness) {
+            ++generationCount;
 
             //Do selection
-            demo.selection();
+            selection();
 
             //Do crossover
-            demo.crossover();
+            crossover();
 
             //Do mutation under a random probability
             if (rn.nextInt()%7 < 5) {
-                demo.mutation();
+                mutation();
             }
 
             //Add fittest offspring to population
-            demo.addFittestOffspring();
+            addFittestOffspring();
 
             //Calculate new fitness value
-            demo.virusPopulation.calculateFitness();
+            virusPopulation.calculateFitness();
 
-            System.out.println("Generation: " + demo.generationCount + " Fittest: " + demo.virusPopulation.fittest);
+            generationFitnessList.add(generationCount, virusPopulation.fittest);
+            System.out.println("Generation: " + generationCount + " Fittest: " + virusPopulation.fittest);
         }
 
-        System.out.println("\nSolution found in generation " + demo.generationCount);
-        System.out.println("Fitness: "+demo.virusPopulation.getFittest().getFitness());
+        populationGraph.showGenerationFitnessGraph(generationFitnessList);
+
+        System.out.println("\nSolution found in generation " + generationCount);
+        System.out.println("Fitness: "+virusPopulation.getFittest().getFitness());
         System.out.print("Genes: ");
         for (int i = 0; i < 10; i++) {
-            System.out.print(demo.virusPopulation.getFittest().genes[i]);
+            System.out.print(virusPopulation.getFittest().genes[i]);
         }
 
         System.out.println("");
 
-        return demo.virusPopulation.getFittest();
+        return virusPopulation.getFittest();
     }
 }

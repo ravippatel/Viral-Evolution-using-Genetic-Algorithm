@@ -1,5 +1,7 @@
 package model;
 
+import util.Helper;
+
 import java.util.Random;
 
 public class Person {
@@ -27,12 +29,10 @@ public class Person {
         if (can_move) {
             x += vel_x;
             y += vel_y;
-            int width = 2000;
-            if (x > width || x < 0) {
+            if (x > Helper.getWidth() || x < 0) {
                 vel_x = -vel_x;
             }
-            int height = 1800;
-            if (y > height || y < 0) {
+            if (y > Helper.getHeight() || y < 0) {
                 vel_y = -vel_y;
             }
         }
