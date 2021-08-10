@@ -9,7 +9,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLOutput;
 import java.util.Random;
 
 public class PopulationFrame extends JPanel implements ActionListener {
@@ -24,8 +23,6 @@ public class PopulationFrame extends JPanel implements ActionListener {
 
     private final int Dots_Size = 10;
     private final int infectDistance = 10;
-
-    private final int DISTANCE_FOR_INFECTION = 10;
     private static int total_days=0;
 
     private final int height;
@@ -35,10 +32,12 @@ public class PopulationFrame extends JPanel implements ActionListener {
     private int firstNewVariantFitness = 0;
     private int secondNewVariantFitness = 0;
     private Virus firstNewVariant;
-    private final simulation.Populate.PopulationGraph PopulationGraph = new PopulationGraph();
+
+    private final PopulationGraph populationGraph = new PopulationGraph();
+    private final GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
 
 
-    public PopulationFrame(int height, int width) {
+    public PopulationFrame(int width, int height) {
         this.width = width;
         this.height = height;
         setPreferredSize(new Dimension(width, height));
@@ -50,9 +49,10 @@ public class PopulationFrame extends JPanel implements ActionListener {
             p[i].fitness=p[i].actual_fitness;
             p[i].gene = getRandomGenoType();
         }
-        firstNewVariant = getNewVariant(null);
+
+        firstNewVariant = getNewVariant(null, 1);
         firstNewVariantFitness = firstNewVariant.getFitness();
-        secondNewVariantFitness = getNewVariant(firstNewVariant).getFitness();
+        secondNewVariantFitness = getNewVariant(firstNewVariant, 2).getFitness();
         p[0].status = PersonStatus.INFECTED;
         p[0].no_infected_days=1;
         TM.start();
@@ -81,22 +81,32 @@ public class PopulationFrame extends JPanel implements ActionListener {
             }
 
             if(p[i].infected && p[i].fitness <= 600){
+                g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
                 g.setColor(Color.red);
+                g.drawString("Generation 1",50,50);
             }
 
             if(p[i].infected && p[i].fitness <= firstNewVariantFitness){
+                g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
                 g.setColor(Color.orange);
+                g.drawString("Generation 2",250,50);
             }
             if(p[i].recovered){
+                g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
                 g.setColor(Color.magenta);
+                g.drawString("Recovered",450,50);
             }
             if(p[i].vaccinated)
             {
+                g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
                 g.setColor(Color.pink);
+                g.drawString("Vaccinated",650,50);
             }
             if(p[i].died)
             {
+                g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
                 g.setColor(Color.BLUE);
+                g.drawString("Died",850,50);
             }
             if(p[i].second_variant &&p[i].infected && p[i].fitness<secondNewVariantFitness)
             {
@@ -107,6 +117,7 @@ public class PopulationFrame extends JPanel implements ActionListener {
 
         }
     }
+
     public int infected(){
         int infected = 0;
         for(int i=0; i<population; i++){
@@ -119,17 +130,49 @@ public class PopulationFrame extends JPanel implements ActionListener {
         }
         return infected;
     }
+
+    public int totalRecovered(){
+        int recovered = 0;
+        for(int i=0; i<population; i++){
+            if(p[i].recovered){
+                recovered++;
+            }
+            //if(p[i].infected){
+                //recovered--;
+            //}
+        }
+        return recovered;
+    }
+
+    public int totalVaccinated(){
+        int vaccinated=0;
+        for(int i=0; i<population; i++){
+            if(p[i].vaccinated){
+                vaccinated++;
+            }
+        }
+        return vaccinated;
+    }
+    public int totalDied(){
+        int died=0;
+        for(int i=0; i<population; i++){
+            if(p[i].died){
+                died++;
+            }
+        }
+        return died;
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         total_days++;
         for(int i=0;i<population;i++){
-
             p[i].move();
             p[i].checkForImmunity(total_days);
         }
         checkDistance();
-        PopulationGraph.showChartVirusEvolution(infected(), population);
-        System.out.println("days="+(total_days));
+        PopulationGraph.showChartVirusEvolution(infected(), population,totalRecovered(), totalVaccinated(), totalDied(), total_days );
+        System.out.println("Days: "+(total_days));
 
         repaint();
     }
@@ -145,8 +188,8 @@ public class PopulationFrame extends JPanel implements ActionListener {
         return geneType[randIdx];
     }
 
-    public Virus getNewVariant(Virus previousVariant) {
-        return  GeneticAlgorithm.runGA(previousVariant);
+    public Virus getNewVariant(Virus previousVariant, int variantNumber) {
+        return  geneticAlgorithm.runGA(previousVariant,populationGraph, variantNumber );
     }
 
 
@@ -168,8 +211,6 @@ public class PopulationFrame extends JPanel implements ActionListener {
                     if(p[j].second_variant){
                         p[j].infected=true;
                     }
-
-
                 }
             }
         }
