@@ -2,8 +2,10 @@ package geneticAlgorithm;
 
 import config.Config;
 
-import java.util.*;
-import java.util.stream.IntStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 public class Virus {
 
@@ -14,7 +16,7 @@ public class Virus {
 
     public Virus() {
 
-        //Set genes randomly for each individual
+        //Set genes randomly for each virus
         for (int i = 0; i < genes.length; i++) {
             int randIdx = new Random().nextInt(geneType.length());
             char randChar = geneType.charAt(randIdx);
@@ -22,7 +24,7 @@ public class Virus {
         }
     }
 
-    //Calculate fitness
+    //Calculate fitness of Virus
     public void calcFitness() {
         this.fitness = 0;
         for (int i = 0; i < 10; i++) {
@@ -30,6 +32,13 @@ public class Virus {
                 this.fitness += genes[i];
             }
         }
+
+        /*
+        * Calculating fitness value for each new Variant
+        * Saving the Virus fitness in hashTable
+        * Key as String of genotype of Virus and List of fitness function for each of the them
+        * Search can be performed efficiently for looking up New Variants
+        * */
 
         List<Integer> fitnessFunctions = new ArrayList<>();
         fitnessFunctions.add(naiveA1Fitness());
@@ -44,7 +53,7 @@ public class Virus {
         fitnessFunctions.add(vaccinatedA2Fitness());
         fitnessFunctions.add(vaccinatedB1Fitness());
         fitnessFunctions.add(vaccinatedB2Fitness());
-        Config.hashtable.put(genes.toString(), fitnessFunctions);
+        Config.hashtable.put(String.valueOf(genes), fitnessFunctions);
         Collections.sort(fitnessFunctions);
         Collections.reverse(fitnessFunctions);
         //this.fitness = (int) fitnessFunctions.stream().mapToInt((x) -> x).average().orElse(0) + 150;
@@ -56,6 +65,10 @@ public class Virus {
         return fitness;
     }
 
+    /*
+    * Fitness functions for 12 types of host population with 4 genotype (A1, A2, B1, B2) and 3 categories(Naive, Recovered, Vaccinated)
+    * naiveA1, naiveA2, naiveB1, naiveB2, recoveredA1, recoveredA2, recoveredB1, recoveredB2, vaccinatedA1, vaccinatedA2, vaccinatedB1, vaccinatedB2
+    * */
     public int naiveA1Fitness() {
         int nA1 = 0;
         for (int i = 0; i < 10; i++) {
@@ -175,4 +188,6 @@ public class Virus {
         }
         return nB2;
     }
+
+
 }

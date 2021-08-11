@@ -1,21 +1,30 @@
 package geneticAlgorithm;
 
+import config.Constant;
+import simulation.PopulationGraph;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class GeneticAlgorithm {
-
+    final List<Integer> generationFitnessList = new ArrayList<>();
     public VirusPopulation virusPopulation = new VirusPopulation();
     private Virus fittest;
     private Virus secondFittest;
     private int generationCount = 0;
 
+
+    public GeneticAlgorithm(){
+
+    }
     //Selection
     void selection() {
 
-        //Select the most fittest individual
+        //Select the most fittest virus
         fittest = virusPopulation.getFittest();
 
-        //Select the second most fittest individual
+        //Select the second most fittest virus
         secondFittest = virusPopulation.getSecondFittest();
     }
 
@@ -67,17 +76,17 @@ public class GeneticAlgorithm {
     }
 
 
-    //Replace least fittest individual from most fittest offspring
+    //Replace least fittest virus from most fittest offspring
     void addFittestOffspring() {
 
         //Update fitness values of offspring
         fittest.calcFitness();
         secondFittest.calcFitness();
 
-        //Get index of least fit individual
+        //Get index of least fit virus
         int leastFittestIndex = virusPopulation.getLeastFittestIndex();
 
-        //Replace least fittest individual from most fittest offspring
+        //Replace least fittest virus from most fittest offspring
         virusPopulation.viruses[leastFittestIndex] = getFittestOffspring();
     }
 
@@ -90,54 +99,67 @@ public class GeneticAlgorithm {
         this.generationCount = generationCount;
     }
 
-    public static Virus runGA(Virus previousGen) {
+    public  Virus runGA(Virus previousGen, PopulationGraph populationGraph, int variantNumber) {
+       //
         Random rn = new Random();
 
-        GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
+        //GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
 
-        int gaFitness = previousGen != null ? previousGen.getFitness() : 500;
+        int gaFitness = previousGen != null ? previousGen.getFitness() : Constant.virusFitness;
 
-        //Initialize population
-        geneticAlgorithm.virusPopulation.initializePopulation(1000);
+        //Initialize host population
+        virusPopulation.initializePopulation(1000);
 
-        //Calculate fitness of each individual
-        geneticAlgorithm.virusPopulation.calculateFitness();
+        //Calculate fitness of each virus
+        virusPopulation.calculateFitness();
 
-        System.out.println("Generation: " + geneticAlgorithm.generationCount + " Fittest: " + geneticAlgorithm.virusPopulation.fittest);
-
-        //While population gets an individual with maximum fitness
-        while (geneticAlgorithm.virusPopulation.fittest < gaFitness) {
-            ++geneticAlgorithm.generationCount;
+        System.out.println("Generation: " + generationCount + " Fittest: " + virusPopulation.fittest);
+        generationFitnessList.add(virusPopulation.fittest);
+        //While population gets an virus with maximum fitness
+        while (virusPopulation.fittest < gaFitness) {
+            ++generationCount;
 
             //Do selection
-            geneticAlgorithm.selection();
+            selection();
 
             //Do crossover
-            geneticAlgorithm.crossover();
+            crossover();
 
-            //Do mutation under a random probability
-            if (rn.nextInt()%7 < 5) {
-                geneticAlgorithm.mutation();
+            //Do mutation under a  probability
+            if (rn.nextInt()%30000 < 3) {
+                mutation();
             }
 
             //Add fittest offspring to population
-            geneticAlgorithm.addFittestOffspring();
+            addFittestOffspring();
 
             //Calculate new fitness value
-            geneticAlgorithm.virusPopulation.calculateFitness();
+            virusPopulation.calculateFitness();
+            generationFitnessList.add(generationCount, virusPopulation.fittest);
 
-            System.out.println("Generation: " + geneticAlgorithm.generationCount + " Fittest: " + geneticAlgorithm.virusPopulation.fittest);
+            System.out.println("Generation: " + generationCount + " Fittest: " + virusPopulation.fittest);
         }
 
-        System.out.println("\nSolution found in generation " + geneticAlgorithm.generationCount);
-        System.out.println("Fitness: "+geneticAlgorithm.virusPopulation.getFittest().getFitness());
+        if(variantNumber==1){
+            populationGraph.showGenerationFitnessGraphForFirstVariant(new ArrayList<>(generationFitnessList));
+        }else{
+            populationGraph.showGenerationFitnessGraphForSecondVariant(new ArrayList<>(generationFitnessList));
+        }
+
+
+       // populationGraph.showGenerationFitnessGraph(new ArrayList<>(generationFitnessList));
+
+        System.out.println("\nSolution found in generation: " + generationCount);
+        System.out.println("Fitness: "+virusPopulation.getFittest().getFitness());
         System.out.print("Genes: ");
         for (int i = 0; i < 10; i++) {
-            System.out.print(geneticAlgorithm.virusPopulation.getFittest().genes[i]);
+            System.out.print(virusPopulation.getFittest().genes[i]);
         }
 
         System.out.println("");
 
-        return geneticAlgorithm.virusPopulation.getFittest();
+        generationFitnessList.clear();
+        generationCount = 0;
+        return virusPopulation.getFittest();
     }
 }
