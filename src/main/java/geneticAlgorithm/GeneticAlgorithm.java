@@ -140,11 +140,11 @@ public class GeneticAlgorithm {
             System.out.println("Generation: " + generationCount + " Fittest: " + virusPopulation.fittest);
         }
 
-//        if(variantNumber==1){
-//            populationGraph.showGenerationFitnessGraphForFirstVariant(new ArrayList<>(generationFitnessList));
-//        }else{
-//            populationGraph.showGenerationFitnessGraphForSecondVariant(new ArrayList<>(generationFitnessList));
-//        }
+        if(variantNumber==1){
+            populationGraph.showGenerationFitnessGraphForFirstVariant(new ArrayList<>(generationFitnessList));
+        }else{
+            populationGraph.showGenerationFitnessGraphForSecondVariant(new ArrayList<>(generationFitnessList));
+        }
 
 
        // populationGraph.showGenerationFitnessGraph(new ArrayList<>(generationFitnessList));
