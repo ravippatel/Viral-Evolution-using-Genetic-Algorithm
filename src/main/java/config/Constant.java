@@ -2,6 +2,10 @@ package config;
 
 public class Constant {
 
+    /*
+    * Configured constants
+    * */
+
     public static final int TEXT_POSITION = 35;
     public static final int TEXT_HEIGHT = 20;
     public static final int FRAME_MIN_HEIGHT = 60;
