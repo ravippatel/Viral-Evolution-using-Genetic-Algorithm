@@ -30,7 +30,7 @@ public class VirusPopulationTest {
     }
 
     @Test
-    public void leastFittest() {
+    public void testLeastFittest() {
         VirusPopulation virusPopulation = new VirusPopulation();
         virusPopulation.initializePopulation(Constant.testPopulation);
         Assert.assertTrue(virusPopulation.getLeastFittestIndex() > 0);
