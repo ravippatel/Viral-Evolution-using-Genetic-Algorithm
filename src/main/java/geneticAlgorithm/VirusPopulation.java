@@ -6,14 +6,14 @@ class VirusPopulation {
     Virus[] viruses = new Virus[10];
     int fittest = 0;
 
-    //Initialize population
+    //Initialize virus population
     public void initializePopulation(int size) {
         for (int i = 0; i < viruses.length; i++) {
             viruses[i] = new Virus();
         }
     }
 
-    //Get the fittest individual
+    //Get the fittest virus
     public Virus getFittest() {
         int maxFit = Integer.MIN_VALUE;
         int maxFitIndex = 0;
@@ -27,7 +27,7 @@ class VirusPopulation {
         return viruses[maxFitIndex];
     }
 
-    //Get the second most fittest individual
+    //Get the second most fittest virus
     public Virus getSecondFittest() {
         int maxFit1 = 0;
         int maxFit2 = 0;
@@ -42,7 +42,7 @@ class VirusPopulation {
         return viruses[maxFit2];
     }
 
-    //Get index of least fittest individual
+    //Get index of least fittest virus
     public int getLeastFittestIndex() {
         int minFitVal = Integer.MAX_VALUE;
         int minFitIndex = 0;
@@ -55,7 +55,7 @@ class VirusPopulation {
         return minFitIndex;
     }
 
-    //Calculate fitness of each individual
+    //Calculate fitness of each virus
     public void calculateFitness() {
 
         for (int i = 0; i < viruses.length; i++) {
