@@ -21,10 +21,10 @@ public class GeneticAlgorithm {
     //Selection
     void selection() {
 
-        //Select the most fittest individual
+        //Select the most fittest virus
         fittest = virusPopulation.getFittest();
 
-        //Select the second most fittest individual
+        //Select the second most fittest virus
         secondFittest = virusPopulation.getSecondFittest();
     }
 
@@ -76,17 +76,17 @@ public class GeneticAlgorithm {
     }
 
 
-    //Replace least fittest individual from most fittest offspring
+    //Replace least fittest virus from most fittest offspring
     void addFittestOffspring() {
 
         //Update fitness values of offspring
         fittest.calcFitness();
         secondFittest.calcFitness();
 
-        //Get index of least fit individual
+        //Get index of least fit virus
         int leastFittestIndex = virusPopulation.getLeastFittestIndex();
 
-        //Replace least fittest individual from most fittest offspring
+        //Replace least fittest virus from most fittest offspring
         virusPopulation.viruses[leastFittestIndex] = getFittestOffspring();
     }
 
@@ -140,11 +140,11 @@ public class GeneticAlgorithm {
             System.out.println("Generation: " + generationCount + " Fittest: " + virusPopulation.fittest);
         }
 
-        if(variantNumber==1){
-            populationGraph.showGenerationFitnessGraphForFirstVariant(new ArrayList<>(generationFitnessList));
-        }else{
-            populationGraph.showGenerationFitnessGraphForSecondVariant(new ArrayList<>(generationFitnessList));
-        }
+//        if(variantNumber==1){
+//            populationGraph.showGenerationFitnessGraphForFirstVariant(new ArrayList<>(generationFitnessList));
+//        }else{
+//            populationGraph.showGenerationFitnessGraphForSecondVariant(new ArrayList<>(generationFitnessList));
+//        }
 
 
        // populationGraph.showGenerationFitnessGraph(new ArrayList<>(generationFitnessList));
