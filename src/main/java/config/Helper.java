@@ -1,4 +1,4 @@
-package util;
+package config;
 
 public class Helper {
     public static int getHeight(){

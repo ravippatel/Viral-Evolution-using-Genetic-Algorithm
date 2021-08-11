@@ -1,6 +1,6 @@
 package geneticAlgorithm;
 
-import simulation.Populate.PopulationGraph;
+import simulation.PopulationGraph;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,7 +104,7 @@ public class GeneticAlgorithm {
 
         //GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
 
-        int gaFitness = previousGen != null ? previousGen.getFitness() : 500;
+        int gaFitness = previousGen != null ? previousGen.getFitness() : 550;
 
         //Initialize population
        virusPopulation.initializePopulation(1000);

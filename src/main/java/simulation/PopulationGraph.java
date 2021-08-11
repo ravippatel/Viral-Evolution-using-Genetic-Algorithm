@@ -1,4 +1,4 @@
-package simulation.Populate;
+package simulation;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -16,39 +16,14 @@ import java.util.List;
 
 
 public class PopulationGraph extends Application {
-    private static final XYChart.Series seriesFitnessOne = new XYChart.Series();
-    private static final XYChart.Series seriesFitnessTwo = new XYChart.Series();
-    private static final XYChart.Series seriesInfected = new XYChart.Series();
-    private static final XYChart.Series seriesRecovered = new XYChart.Series();
-    private static final XYChart.Series seriesDied = new XYChart.Series();
-    private static final XYChart.Series seriesVaccinated = new XYChart.Series();
+    private static final XYChart.Series fitnessOneSeries = new XYChart.Series();
+    private static final XYChart.Series fitnessTwoSeries = new XYChart.Series();
+    private static final XYChart.Series infectedSeries = new XYChart.Series();
+    private static final XYChart.Series recoveredSeries = new XYChart.Series();
+    private static final XYChart.Series diedSeries = new XYChart.Series();
+    private static final XYChart.Series vaccinatedSeries = new XYChart.Series();
 
     private Scene scene;
-
-    public static void showChartVirusEvolution(int infected, int population, int recovered, int vaccinated, int died, int days) {
-        Platform.runLater(() -> {
-            seriesInfected.getData().add(new XYChart.Data(String.valueOf(days), infected));
-            seriesRecovered.getData().add(new XYChart.Data(String.valueOf(days), recovered));
-            seriesVaccinated.getData().add(new XYChart.Data(String.valueOf(days), vaccinated));
-            seriesDied.getData().add(new XYChart.Data(String.valueOf(days), died));
-        });
-    }
-
-    public void showGenerationFitnessGraphForFirstVariant(List<Integer> generationFitnessList) {
-        Platform.runLater(() -> {
-            for (int i = 0; i < generationFitnessList.size(); i++) {
-                seriesFitnessOne.getData().add(new XYChart.Data(String.valueOf(i), generationFitnessList.get(i)));
-            }
-        });
-    }
-
-    public void showGenerationFitnessGraphForSecondVariant(List<Integer> generationFitnessList) {
-        Platform.runLater(() -> {
-            for (int i = 0; i < generationFitnessList.size(); i++) {
-                seriesFitnessTwo.getData().add(new XYChart.Data(String.valueOf(i), generationFitnessList.get(i)));
-            }
-        });
-    }
 
     @Override
     public void start(Stage stage) {
@@ -70,17 +45,17 @@ public class PopulationGraph extends Application {
         AreaChart<String, Number> areaChart = new AreaChart<>(xAxis, yAxis);
 
         areaChart.setTitle("Viral Evolution Chart");
-        seriesInfected.setName("Infected");
-        seriesRecovered.setName("Recovered");
-        seriesVaccinated.setName("Vaccinated");
-        seriesDied.setName("Died");
+        infectedSeries.setName("Infected");
+        recoveredSeries.setName("Recovered");
+        vaccinatedSeries.setName("Vaccinated");
+        diedSeries.setName("Died");
 
         areaChart.setPrefSize(600, 400);
         areaChart.setLegendSide(Side.TOP);
-        areaChart.getData().addAll(seriesInfected);
-        areaChart.getData().addAll(seriesRecovered);
-        areaChart.getData().addAll(seriesVaccinated);
-        areaChart.getData().addAll(seriesDied);
+        areaChart.getData().addAll(infectedSeries);
+        areaChart.getData().addAll(recoveredSeries);
+        areaChart.getData().addAll(vaccinatedSeries);
+        areaChart.getData().addAll(diedSeries);
 
         return areaChart;
     }
@@ -93,11 +68,11 @@ public class PopulationGraph extends Application {
         yAxis.setLabel("Fitness");
         AreaChart<String, Number> areaChart = new AreaChart<>(xAxis, yAxis);
         areaChart.setTitle("Generation Fitness Graph for Variant One");
-        seriesFitnessOne.setName("Generations");
+        fitnessOneSeries.setName("Generations");
 
         areaChart.setPrefSize(600, 280);
         areaChart.setLegendSide(Side.TOP);
-        areaChart.getData().addAll(seriesFitnessOne);
+        areaChart.getData().addAll(fitnessOneSeries);
         return areaChart;
     }
 
@@ -109,11 +84,36 @@ public class PopulationGraph extends Application {
         yAxis.setLabel("Fitness");
         AreaChart<String, Number> areaChart = new AreaChart<>(xAxis, yAxis);
         areaChart.setTitle("Generation Fitness Graph for Variant Two ");
-        seriesFitnessTwo.setName("Generations");
+        fitnessTwoSeries.setName("Generations");
 
         areaChart.setPrefSize(600, 280);
         areaChart.setLegendSide(Side.TOP);
-        areaChart.getData().addAll(seriesFitnessTwo);
+        areaChart.getData().addAll(fitnessTwoSeries);
         return areaChart;
+    }
+
+    public static void showChartVirusEvolution(int infected, int population, int recovered, int vaccinated, int died, int days) {
+        Platform.runLater(() -> {
+            infectedSeries.getData().add(new XYChart.Data(String.valueOf(days), infected));
+            recoveredSeries.getData().add(new XYChart.Data(String.valueOf(days), recovered));
+            vaccinatedSeries.getData().add(new XYChart.Data(String.valueOf(days), vaccinated));
+            diedSeries.getData().add(new XYChart.Data(String.valueOf(days), died));
+        });
+    }
+
+    public void showGenerationFitnessGraphForFirstVariant(List<Integer> generationFitnessList) {
+        Platform.runLater(() -> {
+            for (int i = 0; i < generationFitnessList.size(); i++) {
+                fitnessOneSeries.getData().add(new XYChart.Data(String.valueOf(i), generationFitnessList.get(i)));
+            }
+        });
+    }
+
+    public void showGenerationFitnessGraphForSecondVariant(List<Integer> generationFitnessList) {
+        Platform.runLater(() -> {
+            for (int i = 0; i < generationFitnessList.size(); i++) {
+                fitnessTwoSeries.getData().add(new XYChart.Data(String.valueOf(i), generationFitnessList.get(i)));
+            }
+        });
     }
 }
