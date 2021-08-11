@@ -34,6 +34,17 @@ public class GeneticAlgorithmTest {
         Assert.assertNotEquals(ga.getGenerationCount(), 1000);
     }
 
+    @Test
+    public void testFitnessList() {
+        GeneticAlgorithm ga = new GeneticAlgorithm();
+        VirusPopulation vP = new VirusPopulation();
+        PopulationGraph pG = getMockPopulationGraph();
+        vP.initializePopulation(Constant.testPopulation);
+        ga.runGA(new Virus(), pG, 1);
+        Assert.assertFalse(ga.generationFitnessList.size() > 0);
+    }
+
+
     private PopulationGraph getMockPopulationGraph() {
         PopulationGraph pG = mock(PopulationGraph.class);
         Mockito.doNothing().when(pG).showGenerationFitnessGraphForFirstVariant(Mockito.anyList());
