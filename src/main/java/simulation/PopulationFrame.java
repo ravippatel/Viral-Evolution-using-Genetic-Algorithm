@@ -15,7 +15,7 @@ import java.util.Random;
 public class PopulationFrame extends JPanel implements ActionListener {
 
     private static int total_days = 0;
-    private final Timer TM = new Timer(100, this);
+    private final Timer TM = new Timer(300, this);
     private final int height;
     private final int width;
     private final Random gen = new Random();
@@ -134,7 +134,7 @@ public class PopulationFrame extends JPanel implements ActionListener {
         }
     }
 
-    public int infected() {
+    public int totalInfected() {
         int infected = 0;
         for (int i = 0; i < population; i++) {
             if (p[i].infected) {
@@ -144,6 +144,9 @@ public class PopulationFrame extends JPanel implements ActionListener {
                 infected--;
             }
         }
+
+        System.out.println("Infected: " + infected);
+
         return infected;
     }
 
@@ -153,7 +156,7 @@ public class PopulationFrame extends JPanel implements ActionListener {
             if (p[i].recovered) {
                 recovered++;
             }
-            //if(p[i].infected){
+            //if(p[i].totalInfected){
             //recovered--;
             //}
         }
@@ -194,15 +197,15 @@ public class PopulationFrame extends JPanel implements ActionListener {
                 secondNewVariantFitness = getNewVariant(firstNewVariant, 2).getFitness();
             }
             checkDistance();
-            PopulationGraph.showChartVirusEvolution(infected(), population, totalRecovered(), totalVaccinated(), totalDied(), total_days);
+            PopulationGraph.showChartVirusEvolution(totalInfected(), population, totalRecovered(), totalVaccinated(), totalDied(), total_days);
             System.out.println("Days: " + (total_days));
 
             repaint();
-            try {
-                Thread.sleep(250);
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
-            }
+//            try {
+//                Thread.sleep(250);
+//            } catch (InterruptedException ex) {
+//                ex.printStackTrace();
+//            }
         }
 
     }
@@ -231,7 +234,7 @@ public class PopulationFrame extends JPanel implements ActionListener {
                 int deltay = p[i].y - p[j].y;
                 double dist = Math.sqrt(deltax * deltax + deltay * deltay);
                 // if the distance between 2 points is small enough, and one of
-                // the Persons is infected, then infect the other Person
+                // the Persons is totalInfected, then infect the other Person
                 if (dist < Constant.INFECT_DISTANCE) {
                     if (p[i].fitness <= 500) {
                         p[j].infected = true;
