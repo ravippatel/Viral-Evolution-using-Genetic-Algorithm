@@ -1,5 +1,6 @@
 package geneticAlgorithm;
 
+import config.Constant;
 import simulation.PopulationGraph;
 
 import java.util.ArrayList;
@@ -104,17 +105,17 @@ public class GeneticAlgorithm {
 
         //GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
 
-        int gaFitness = previousGen != null ? previousGen.getFitness() : 550;
+        int gaFitness = previousGen != null ? previousGen.getFitness() : Constant.virusFitness;
 
-        //Initialize population
-       virusPopulation.initializePopulation(1000);
+        //Initialize host population
+        virusPopulation.initializePopulation(1000);
 
-        //Calculate fitness of each individual
+        //Calculate fitness of each virus
         virusPopulation.calculateFitness();
 
         System.out.println("Generation: " + generationCount + " Fittest: " + virusPopulation.fittest);
         generationFitnessList.add(virusPopulation.fittest);
-        //While population gets an individual with maximum fitness
+        //While population gets an virus with maximum fitness
         while (virusPopulation.fittest < gaFitness) {
             ++generationCount;
 
@@ -124,8 +125,8 @@ public class GeneticAlgorithm {
             //Do crossover
             crossover();
 
-            //Do mutation under a random probability
-            if (rn.nextInt()%7 < 5) {
+            //Do mutation under a  probability
+            if (rn.nextInt()%30000 < 3) {
                 mutation();
             }
 

@@ -21,7 +21,7 @@ public class PopulationFrame extends JPanel implements ActionListener {
     private final Random gen = new Random();
     private final PopulationGraph populationGraph = new PopulationGraph();
     private final GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
-    private final int population = 1000;
+    private final int population = Constant.hostPopulation;
     private final Person[] p = new Person[population];
     private final Virus firstNewVariant;
     private int firstNewVariantFitness = 0;
@@ -43,7 +43,7 @@ public class PopulationFrame extends JPanel implements ActionListener {
 
         firstNewVariant = getNewVariant(null, 1);
         firstNewVariantFitness = firstNewVariant.getFitness();
-        secondNewVariantFitness = getNewVariant(firstNewVariant, 2).getFitness();
+
         p[0].status = PersonStatus.INFECTED;
         p[0].no_infected_days = 1;
         TM.start();
@@ -188,6 +188,10 @@ public class PopulationFrame extends JPanel implements ActionListener {
             for (int i = 0; i < population; i++) {
                 p[i].move();
                 p[i].checkForImmunity(total_days);
+            }
+
+            if (total_days == 100) {
+                secondNewVariantFitness = getNewVariant(firstNewVariant, 2).getFitness();
             }
             checkDistance();
             PopulationGraph.showChartVirusEvolution(infected(), population, totalRecovered(), totalVaccinated(), totalDied(), total_days);
