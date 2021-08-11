@@ -1,6 +1,6 @@
 package geneticAlgorithm;
 
-import simulation.Populate.PopulationGraph;
+import simulation.PopulationGraph;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,5 +1,6 @@
-package simulation.Populate;
+package simulation;
 
+import config.Constant;
 import geneticAlgorithm.GeneticAlgorithm;
 import geneticAlgorithm.Virus;
 import model.Person;
@@ -15,19 +16,16 @@ public class PopulationFrame extends JPanel implements ActionListener {
 
     private static int total_days = 0;
     private final Timer TM = new Timer(100, this);
-    private final int Dots_Size = 10;
-    private final int infectDistance = 10;
     private final int height;
     private final int width;
     private final Random gen = new Random();
     private final PopulationGraph populationGraph = new PopulationGraph();
     private final GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
     private final int population = 1000;
-    int moveablePopulation = (population * 30) / 100;
     private final Person[] p = new Person[population];
+    private final Virus firstNewVariant;
     private int firstNewVariantFitness = 0;
     private int secondNewVariantFitness = 0;
-    private final Virus firstNewVariant;
 
 
     public PopulationFrame(int width, int height) {
@@ -36,7 +34,7 @@ public class PopulationFrame extends JPanel implements ActionListener {
         setPreferredSize(new Dimension(width, height));
         for (int i = 0; i < population; i++) {
             int x = gen.nextInt(width);
-            int y = gen.nextInt(height);
+            int y = gen.nextInt((height - Constant.FRAME_MIN_HEIGHT) + 1) + Constant.FRAME_MIN_HEIGHT;
             p[i] = new Person(x, y);
             p[i].actual_fitness = getRandomFitness(500, 700);
             p[i].fitness = p[i].actual_fitness;
@@ -64,46 +62,74 @@ public class PopulationFrame extends JPanel implements ActionListener {
         super.paintComponent(g);
         for (int i = 0; i < population; i++) {
             if (p[i].fitness <= 550) {
-                g.setColor(Color.gray);
+                Color NaiveColor = Color.decode("#bdc3c7");
+                g.setColor(NaiveColor);
+                g.setFont(new Font("TimesRoman", Font.PLAIN, Constant.TEXT_HEIGHT));
+                g.drawString("Naive", 25, Constant.TEXT_POSITION);
+
             } else if (p[i].fitness <= 600) {
-                g.setColor(Color.gray.darker());
+                // g.setColor(Color.gray.darker());
+
+                Color NaiveColor = Color.decode("#bdc3c7");
+                g.setColor(NaiveColor);
             } else if (p[i].fitness <= 650) {
-                g.setColor(Color.gray.darker().darker());
+                //g.setColor(Color.gray.darker().darker());
+
+                Color NaiveColor = Color.decode("#bdc3c7");
+                g.setColor(NaiveColor);
             } else if (p[i].fitness <= 700) {
-                g.setColor(Color.gray.darker().darker().darker());
+                //g.setColor(Color.gray.darker().darker().darker());
+
+                Color NaiveColor = Color.decode("#bdc3c7");
+                g.setColor(NaiveColor);
             }
 
             if (p[i].infected && p[i].fitness <= 600) {
-                g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+                g.setFont(new Font("TimesRoman", Font.PLAIN, Constant.TEXT_HEIGHT));
                 g.setColor(Color.red);
-                g.drawString("Generation 1", 50, 50);
+                Color InfectedOneColor = Color.decode("#c0392b");
+                g.setColor(InfectedOneColor);
+                g.drawString("Generation 1", 110, Constant.TEXT_POSITION);
             }
 
             if (p[i].infected && p[i].fitness <= firstNewVariantFitness) {
-                g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
-                g.setColor(Color.orange);
-                g.drawString("Generation 2", 250, 50);
+                g.setFont(new Font("TimesRoman", Font.PLAIN, Constant.TEXT_HEIGHT));
+                Color InfectedTwoColor = Color.decode("#9b59b6");
+                g.setColor(InfectedTwoColor);
+                g.drawString("Generation 2", 260, Constant.TEXT_POSITION);
             }
             if (p[i].recovered) {
-                g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
-                g.setColor(Color.magenta);
-                g.drawString("Recovered", 450, 50);
+                g.setFont(new Font("TimesRoman", Font.PLAIN, Constant.TEXT_HEIGHT));
+                //g.setColor(Color.orange);
+                Color RecoveredColor = Color.decode("#e67e22");
+                g.setColor(RecoveredColor);
+
+                g.drawString("Recovered", 410, Constant.TEXT_POSITION);
             }
             if (p[i].vaccinated) {
-                g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
-                g.setColor(Color.pink);
-                g.drawString("Vaccinated", 650, 50);
+                g.setFont(new Font("TimesRoman", Font.PLAIN, Constant.TEXT_HEIGHT));
+                Color VaccinatedColor = Color.decode("#2ecc71");
+                g.setColor(VaccinatedColor);
+                //g.setColor(Color.GREEN);
+                g.drawString("Vaccinated", 560, Constant.TEXT_POSITION);
             }
             if (p[i].died) {
-                g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
-                g.setColor(Color.BLUE);
-                g.drawString("Died", 850, 50);
+                g.setFont(new Font("TimesRoman", Font.PLAIN, Constant.TEXT_HEIGHT));
+                //g.setColor(Color.CYAN);
+                Color Belize = Color.decode("#3498db");
+                g.setColor(Belize);
+
+                g.drawString("Died", 710, Constant.TEXT_POSITION);
             }
             if (p[i].second_variant && p[i].infected && p[i].fitness < secondNewVariantFitness) {
-                g.setColor(Color.CYAN);
+                g.setFont(new Font("TimesRoman", Font.PLAIN, Constant.TEXT_HEIGHT));
+                //g.setColor(Color.BLUE);
+                Color Midnight = Color.decode("#2c3e50");
+                g.setColor(Midnight);
+                g.drawString("Delta Variant", 800, Constant.TEXT_POSITION);
 
             }
-            g.fillOval(p[i].x, p[i].y, Dots_Size, Dots_Size);
+            g.fillOval(p[i].x, p[i].y, Constant.DOTS_SIZE, Constant.DOTS_SIZE);
 
         }
     }
@@ -156,16 +182,25 @@ public class PopulationFrame extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        total_days++;
-        for (int i = 0; i < population; i++) {
-            p[i].move();
-            p[i].checkForImmunity(total_days);
-        }
-        checkDistance();
-        PopulationGraph.showChartVirusEvolution(infected(), population, totalRecovered(), totalVaccinated(), totalDied(), total_days);
-        System.out.println("Days: " + (total_days));
+        if (total_days <= 730) {
+            total_days++;
 
-        repaint();
+            for (int i = 0; i < population; i++) {
+                p[i].move();
+                p[i].checkForImmunity(total_days);
+            }
+            checkDistance();
+            PopulationGraph.showChartVirusEvolution(infected(), population, totalRecovered(), totalVaccinated(), totalDied(), total_days);
+            System.out.println("Days: " + (total_days));
+
+            repaint();
+            try {
+                Thread.sleep(250);
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+        }
+
     }
 
     public int getRandomFitness(int min, int max) {
@@ -193,7 +228,7 @@ public class PopulationFrame extends JPanel implements ActionListener {
                 double dist = Math.sqrt(deltax * deltax + deltay * deltay);
                 // if the distance between 2 points is small enough, and one of
                 // the Persons is infected, then infect the other Person
-                if (dist < infectDistance) {
+                if (dist < Constant.INFECT_DISTANCE) {
                     if (p[i].fitness <= 500) {
                         p[j].infected = true;
 //                        p[i].no_infected_days++;

@@ -46,7 +46,7 @@ public class Virus {
         fitnessFunctions.add(vaccinatedA2Fitness());
         fitnessFunctions.add(vaccinatedB1Fitness());
         fitnessFunctions.add(vaccinatedB2Fitness());
-        Config.hashtable.put(genes.toString(), fitnessFunctions);
+        Config.hashtable.put(String.valueOf(genes), fitnessFunctions);
         Collections.sort(fitnessFunctions);
         Collections.reverse(fitnessFunctions);
         //this.fitness = (int) fitnessFunctions.stream().mapToInt((x) -> x).average().orElse(0) + 150;
