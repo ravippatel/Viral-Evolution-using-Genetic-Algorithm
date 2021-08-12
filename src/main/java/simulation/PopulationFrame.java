@@ -27,7 +27,7 @@ public class PopulationFrame extends JPanel implements ActionListener {
     private final Person[] p = new Person[population];
     private final Virus firstNewVariant;
     private int firstNewVariantFitness = 0;
-    private int secondNewVariantFitness = 0;
+    private int secondNewVariantFitness = 1000;
 
     public void printPerson(Person p, int i) {
 //        System.out.println("fitness: "+p.fitness+"\t actual Fitness: "+p.actual_fitness+"\tgen1: "+p.gen1+"\tgen2: "+p.gen2+"\tinfected: "+p.infected+"\t vaccinaed: "+p.vaccinated+"\trecovered: "+p.recovered);
@@ -113,7 +113,7 @@ public class PopulationFrame extends JPanel implements ActionListener {
 //                g.setColor(NaiveColor);
 //            }
 
-            if ((p[i].infected_main && p[i].fitness <= 600) || p[i].main_virus ) {
+            if ((p[i].infected_main && p[i].fitness <= firstNewVariantFitness) || p[i].main_virus ) {
                 g.setFont(new Font("TimesRoman", Font.PLAIN, Constant.TEXT_HEIGHT));
                 g.setColor(Color.red);
                 Color InfectedOneColor = Color.decode("#c0392b");
@@ -122,7 +122,7 @@ public class PopulationFrame extends JPanel implements ActionListener {
 
                     p[i].main_virus =true;
             }
-            if(((p[i].infected_gen1 && p[i].fitness<firstNewVariantFitness+100) || p[i].gen1_virus )&& !p[i].main_virus) {
+            if(((p[i].infected_gen1 && p[i].fitness<secondNewVariantFitness) || p[i].gen1_virus )&& !p[i].main_virus) {
                 g.setFont(new Font("TimesRoman", Font.PLAIN, Constant.TEXT_HEIGHT));
                 Color InfectedTwoColor = Color.decode("#9b59b6");
                 g.setColor(InfectedTwoColor);
@@ -305,10 +305,10 @@ public class PopulationFrame extends JPanel implements ActionListener {
                 p[i].move();
                 p[i].checkForImmunity(total_days);
             }
-//
-//            if (total_days == 1400) {
-//                secondNewVariantFitness = getNewVariant(firstNewVariant, 2).getFitness();
-//            }
+
+            if (total_days == 200) {
+                secondNewVariantFitness = getNewVariant(firstNewVariant, 2).getFitness();
+            }
             checkDistance();
             PopulationGraph.showChartVirusEvolution(infected_main(),infected_gen1(),infected_delta(), population, totalRecovered(), totalVaccinated(), totalDied(), total_days);
 //            System.out.println("Days: " + (total_days)+"\t"+firstNewVariantFitness+"\t"+secondNewVariantFitness);
