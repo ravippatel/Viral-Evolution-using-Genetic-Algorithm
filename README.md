@@ -1,5 +1,10 @@
 # INFO6205-ViralEvolution
 
+**##Group Members**
+Heni Bhungalia
+Ravi Patel
+Sachin Dhumne
+
 ## Preview
 **[View Live Preview](https://youtu.be/q_oB-u11yxg)**
 
