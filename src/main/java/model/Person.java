@@ -7,7 +7,6 @@ import java.util.Random;
 
 public class Person {
     private final Random random = new Random();
-    public PersonStatus status = PersonStatus.NAIVE;
     public int x;
     public int y;
     public boolean can_move = true;

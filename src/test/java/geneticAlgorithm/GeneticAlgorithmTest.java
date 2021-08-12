@@ -3,10 +3,9 @@ package geneticAlgorithm;
 import config.Constant;
 import org.junit.Assert;
 import org.junit.Test;
-import org.mockito.Mockito;
 import simulation.PopulationGraph;
 
-import static org.mockito.Mockito.mock;
+import static geneticAlgorithm.TestHelper.getMockPopulationGraph;
 
 public class GeneticAlgorithmTest {
     @Test
@@ -42,15 +41,6 @@ public class GeneticAlgorithmTest {
         vP.initializePopulation(Constant.testPopulation);
         ga.runGA(new Virus(), pG, 1);
         Assert.assertFalse(ga.generationFitnessList.size() > 0);
-    }
-
-
-    private PopulationGraph getMockPopulationGraph() {
-        PopulationGraph pG = mock(PopulationGraph.class);
-        Mockito.doNothing().when(pG).showGenerationFitnessGraphForFirstVariant(Mockito.anyList());
-        Mockito.doNothing().when(pG).showGenerationFitnessGraphForSecondVariant(Mockito.anyList());
-
-        return  pG;
     }
 
 }
