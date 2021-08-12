@@ -21,7 +21,7 @@ public class PopulationFrame extends JPanel implements ActionListener {
 
 
     private final Random gen = new Random();
-    private final PopulationGraph populationGraph = new PopulationGraph();
+    private  PopulationGraph populationGraph;
     private final GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
     private final int population = Constant.hostPopulation;
     private final Person[] p = new Person[population];
@@ -34,9 +34,10 @@ public class PopulationFrame extends JPanel implements ActionListener {
         System.out.print(i+"\t"+p.fitness+"\t"+p.actual_fitness+"\t"+p.main_virus +"\t"+p.gen1_virus +"\t"+p.infected_main+"\t"+p.infected_gen1);
     }
 
-    public PopulationFrame(int width, int height) {
+    public PopulationFrame(int width, int height, PopulationGraph populationGraph) {
         this.width = width;
         this.height = height;
+        this.populationGraph = populationGraph;
         setPreferredSize(new Dimension(width, height));
         for (int i = 0; i < population; i++) {
             int x = gen.nextInt(width);
