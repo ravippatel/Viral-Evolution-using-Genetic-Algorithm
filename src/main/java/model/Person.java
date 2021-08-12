@@ -27,7 +27,7 @@ public class Person {
     public int no_infected_days = 0;
     public int immune_days = 0;
     public boolean died = false;
-    public int infected_duration = 1400;
+    public int infected_duration = 700;
     private int vel_x = 0;
     private int vel_y = 0;
 
@@ -92,7 +92,7 @@ public class Person {
             if (immune_days++ == 70)
                 vaccinateHostPopulation();
         }
-        if (total_days > 1500 && !infected_main && !infected_gen1 && !infected_delta) {
+        if (total_days > 1200 && !infected_main && !infected_gen1 && !infected_delta) {
             vaccinated = true;
 
         }
