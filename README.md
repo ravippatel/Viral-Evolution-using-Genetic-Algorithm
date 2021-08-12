@@ -1,9 +1,9 @@
 # INFO6205-ViralEvolution
 
 **##Group Members**
-Heni Bhungalia
-Ravi Patel
-Sachin Dhumne
+- Heni Bhungalia (001544075)
+- Ravi Patel (001533801)
+- Sachin Dhumne (001066158)
 
 ## Preview
 **[View Live Preview](https://youtu.be/q_oB-u11yxg)**
