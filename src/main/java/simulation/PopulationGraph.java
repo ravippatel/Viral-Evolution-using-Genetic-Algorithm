@@ -92,11 +92,9 @@ public class PopulationGraph extends Application {
         return areaChart;
     }
 
-    public static void showChartVirusEvolution(int infected_main,int infected_gen1,int infected_delta, int population, int recovered, int vaccinated, int died, int days) {
+    public static void showChartVirusEvolution(int infected, int population, int recovered, int vaccinated, int died, int days) {
         Platform.runLater(() -> {
-            infectedSeries.getData().add(new XYChart.Data(String.valueOf(days), infected_main));
-            infectedSeries.getData().add(new XYChart.Data(String.valueOf(days), infected_gen1));
-            infectedSeries.getData().add(new XYChart.Data(String.valueOf(days), infected_delta));
+            infectedSeries.getData().add(new XYChart.Data(String.valueOf(days), infected));
             recoveredSeries.getData().add(new XYChart.Data(String.valueOf(days), recovered));
             vaccinatedSeries.getData().add(new XYChart.Data(String.valueOf(days), vaccinated));
             diedSeries.getData().add(new XYChart.Data(String.valueOf(days), died));

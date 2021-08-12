@@ -25,14 +25,16 @@ public class PopulationFrame extends JPanel implements ActionListener {
     private final GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
     private final int population = Constant.hostPopulation;
     private final Person[] p = new Person[population];
-    private final Virus firstNewVariant;
-    private int firstNewVariantFitness = 0;
-    private int secondNewVariantFitness = 1000;
+    private final Virus firstVariant;
+    private Virus secondVariant;
+    private Virus thirdVariant;
+    private int firstVariantFitness = 0;
+    private int secondVariantFitness = 1000;
+    private int thirdVariantFitness = 1000;
 
-    public void printPerson(Person p, int i) {
-//        System.out.println("fitness: "+p.fitness+"\t actual Fitness: "+p.actual_fitness+"\tgen1: "+p.gen1+"\tgen2: "+p.gen2+"\tinfected: "+p.infected+"\t vaccinaed: "+p.vaccinated+"\trecovered: "+p.recovered);
-        System.out.print(i+"\t"+p.fitness+"\t"+p.actual_fitness+"\t"+p.main_virus +"\t"+p.gen1_virus +"\t"+p.infected_main+"\t"+p.infected_gen1);
-    }
+//    public void printPerson(Person p, int i) {
+//        System.out.print(i+"\t"+p.fitness+"\t"+p.actual_fitness+"\t"+p.main_virus +"\t"+p.gen1_virus +"\t"+p.infected_main+"\t"+p.infected_gen1);
+//    }
 
     public PopulationFrame(int width, int height, PopulationGraph populationGraph) {
         this.width = width;
@@ -53,11 +55,10 @@ public class PopulationFrame extends JPanel implements ActionListener {
             p[i].gene = getRandomGenoType();
         }
 
-        firstNewVariant = getNewVariant(null, 1);
-        firstNewVariantFitness = firstNewVariant.getFitness();
-        secondNewVariantFitness = getNewVariant(firstNewVariant, 2).getFitness();
+        firstVariant = getNewVariant(null, 1);
+        firstVariantFitness = firstVariant.getFitness();
 
-        System.out.println("first fitness"+firstNewVariantFitness);
+        System.out.println("first fitness"+ firstVariantFitness);
 //        p[1].status = PersonStatus.INFECTED;
 //        p[1].main_virus=true;
 //        p[1].no_infected_days = 1;
@@ -113,7 +114,7 @@ public class PopulationFrame extends JPanel implements ActionListener {
 //                g.setColor(NaiveColor);
 //            }
 
-            if ((p[i].infected_main && p[i].fitness <= firstNewVariantFitness) || p[i].main_virus ) {
+            if ((p[i].infected_main && p[i].fitness <= firstVariantFitness) || p[i].main_virus ) {
                 g.setFont(new Font("TimesRoman", Font.PLAIN, Constant.TEXT_HEIGHT));
                 g.setColor(Color.red);
                 Color InfectedOneColor = Color.decode("#c0392b");
@@ -122,7 +123,7 @@ public class PopulationFrame extends JPanel implements ActionListener {
 
                     p[i].main_virus =true;
             }
-            if(((p[i].infected_gen1 && p[i].fitness<secondNewVariantFitness) || p[i].gen1_virus )&& !p[i].main_virus) {
+            if(((p[i].infected_gen1 && p[i].fitness< secondVariantFitness) || p[i].gen1_virus )&& !p[i].main_virus) {
                 g.setFont(new Font("TimesRoman", Font.PLAIN, Constant.TEXT_HEIGHT));
                 Color InfectedTwoColor = Color.decode("#9b59b6");
                 g.setColor(InfectedTwoColor);
@@ -154,7 +155,7 @@ public class PopulationFrame extends JPanel implements ActionListener {
                 p[i].can_move = false;
                 g.drawString("Died", 710, Constant.TEXT_POSITION);
             }
-            if (((p[i].infected_delta && p[i].fitness < secondNewVariantFitness) || p[i].delta_variant) && !p[i].main_virus && !p[i].gen1_virus) {
+            if (((p[i].infected_delta && p[i].fitness < thirdVariantFitness) || p[i].delta_variant) && !p[i].main_virus && !p[i].gen1_virus) {
                 g.setFont(new Font("TimesRoman", Font.PLAIN, Constant.TEXT_HEIGHT));
                 //g.setColor(Color.BLUE);
                 Color Midnight = Color.decode("#2c3e50");
@@ -165,7 +166,7 @@ public class PopulationFrame extends JPanel implements ActionListener {
             }
             g.fillOval(p[i].x, p[i].y, Constant.DOTS_SIZE, Constant.DOTS_SIZE);
         }
-        if(total_days==300) {
+        if(total_days==400) {
             for (int k = 0; k < 10; k++) {
                 int rand = gen.nextInt(1000);
                 if(p[rand].died || p[rand].main_virus) {
@@ -218,51 +219,61 @@ public class PopulationFrame extends JPanel implements ActionListener {
             }
         }
     }
-    public int infected_main() {
+
+    public int infected() {
         int infected = 0;
         for (int i = 0; i < population; i++) {
-            if (p[i].infected_main) {
+            if (p[i].infected_main||p[i].infected_gen1||p[i].infected_delta) {
                 infected++;
             }
             if (p[i].recovered) {
                 infected--;
             }
         }
-
-//        System.out.println("Infected: " + infected);
-
         return infected;
     }
-
-    public int infected_gen1() {
-        int infected = 0;
-        for (int i = 0; i < population; i++) {
-            if (p[i].infected_gen1) {
-                infected++;
-            }
-            if (p[i].recovered) {
-                infected--;
-            }
-        }
-
-//        System.out.println("Infected: " + infected);
-
-        return infected;
-    }public int infected_delta() {
-        int infected = 0;
-        for (int i = 0; i < population; i++) {
-            if (p[i].infected_delta) {
-                infected++;
-            }
-            if (p[i].recovered) {
-                infected--;
-            }
-        }
-
-//        System.out.println("Infected: " + infected);
-
-        return infected;
-    }
+//
+//    public int infected_main() {
+//        int infected = 0;
+//        for (int i = 0; i < population; i++) {
+//            if (p[i].infected_main) {
+//                infected++;
+//            }
+//            if (p[i].recovered) {
+//                infected--;
+//            }
+//        }
+//        return infected;
+//    }
+//
+//    public int infected_gen1() {
+//        int infected = 0;
+//        for (int i = 0; i < population; i++) {
+//            if (p[i].infected_gen1) {
+//                infected++;
+//            }
+//            if (p[i].recovered) {
+//                infected--;
+//            }
+//        }
+//        return infected;
+//    }
+//
+//    public int infected_delta() {
+//        int infected = 0;
+//        for (int i = 0; i < population; i++) {
+//            if (p[i].infected_delta) {
+//                infected++;
+//            }
+//            if (p[i].recovered) {
+//                infected--;
+//            }
+//        }
+//
+////        System.out.println("Infected: " + infected);
+//
+//        return infected;
+//    }
 
     public int totalRecovered() {
         int recovered = 0;
@@ -306,21 +317,26 @@ public class PopulationFrame extends JPanel implements ActionListener {
                 p[i].checkForImmunity(total_days);
             }
 
-            if (total_days == 200) {
-                secondNewVariantFitness = getNewVariant(firstNewVariant, 2).getFitness();
+            if (total_days == 350) {
+                secondVariant = getNewVariant(firstVariant, 2);
+                secondVariantFitness = secondVariant.getFitness();
+            }
+            if (total_days == 900) {
+                thirdVariant = getNewVariant(secondVariant, 3);
+                thirdVariantFitness = thirdVariant.getFitness();
             }
             checkDistance();
-            PopulationGraph.showChartVirusEvolution(infected_main(),infected_gen1(),infected_delta(), population, totalRecovered(), totalVaccinated(), totalDied(), total_days);
+            PopulationGraph.showChartVirusEvolution(infected(), population, totalRecovered(), totalVaccinated(), totalDied(), total_days);
 //            System.out.println("Days: " + (total_days)+"\t"+firstNewVariantFitness+"\t"+secondNewVariantFitness);
 
-            System.out.print("\n"+total_days+"\t");
-            printPerson(p[0],0);
-            System.out.print("\n"+total_days+"\t");
-            printPerson(p[1],1);
-            System.out.print("\n"+total_days+"\t");
-            printPerson(p[2],2);
-            System.out.print("\n"+total_days+"\t");
-            printPerson(p[3],3);
+//            System.out.print("\n"+total_days+"\t");
+//            printPerson(p[0],0);
+//            System.out.print("\n"+total_days+"\t");
+//            printPerson(p[1],1);
+//            System.out.print("\n"+total_days+"\t");
+//            printPerson(p[2],2);
+//            System.out.print("\n"+total_days+"\t");
+//            printPerson(p[3],3);
 
             repaint();
 //            try {
