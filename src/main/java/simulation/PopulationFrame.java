@@ -4,7 +4,6 @@ import config.Constant;
 import geneticAlgorithm.GeneticAlgorithm;
 import geneticAlgorithm.Virus;
 import model.Person;
-import model.PersonStatus;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,7 +18,7 @@ public class PopulationFrame extends JPanel implements ActionListener {
     private final int height;
     private final int width;
     private final Random gen = new Random();
-    private final PopulationGraph populationGraph = new PopulationGraph();
+    private PopulationGraph populationGraph;
     private final GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
     private final int population = Constant.hostPopulation;
     private final Person[] p = new Person[population];
@@ -28,9 +27,10 @@ public class PopulationFrame extends JPanel implements ActionListener {
     private int secondNewVariantFitness = 0;
 
 
-    public PopulationFrame(int width, int height) {
+    public PopulationFrame(int width, int height, PopulationGraph populationGraph) {
         this.width = width;
         this.height = height;
+        this.populationGraph = populationGraph;
         setPreferredSize(new Dimension(width, height));
         for (int i = 0; i < population; i++) {
             int x = gen.nextInt(width);
@@ -44,7 +44,7 @@ public class PopulationFrame extends JPanel implements ActionListener {
         firstNewVariant = getNewVariant(null, 1);
         firstNewVariantFitness = firstNewVariant.getFitness();
 
-        p[0].status = PersonStatus.INFECTED;
+        p[0].infected = true;
         p[0].no_infected_days = 1;
         TM.start();
     }
