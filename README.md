@@ -16,8 +16,8 @@
 * Mokito
 
 ----------------------------------------------------------
-## How to run the app?
-- Start the Simulation
+## How to run the Simulation?
+Start the Simulation
   - `mvn clean` to the project directory folder
   - `mvn install` to install required dependencies
   - `mvn build` to build the project 
@@ -25,9 +25,12 @@
 ----------------------------------------------------------
 
 ### Genetic Algorithm
+A genetic algorithm (GA) is a metaheuristic inspired by the process of natural selection that belongs to the larger class of evolutionary algorithms (EA). Genetic algorithms are commonly used to generate high-quality solutions to optimization and search problems by relying on biologically inspired operators such as mutation, crossover and selection.
+We are using 12 fitness fuctions for the evolution of the Virus Evolution. These are stored in HashTable to perform search and visualization in graphical form.
 
 ----------------------------------------------------------
-#### Simulation
+### Simulation
+A simulation is the imitation of the operation of a real-world process or system over time. Simulations require the use of models; the model represents the key characteristics or behaviors of the selected system or process, whereas the simulation represents the evolution of the model over time. We are using showing the host population and evolution of 3 strong Covid-19 variants affecting host population over the period of time. Model includes naive, recovered and vaccination of host population after one year.
 
 ----------------------------------------------------------
 #### Project - Overview 
