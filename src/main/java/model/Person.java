@@ -7,23 +7,45 @@ import java.util.Random;
 
 public class Person {
     private final Random random = new Random();
+    public PersonStatus status = PersonStatus.NAIVE;
     public int x;
     public int y;
     public boolean can_move = true;
     public boolean immune = false;
-    public int fitness = 0;
-    public int actual_fitness = 0;
+    public double fitness = 0;
+    public double actual_fitness = 0;
+    public boolean main_virus =false;
+    public boolean gen1_virus =false;
     public String gene = "";
-    public boolean second_variant = false;
+    public boolean delta_variant = false;
     public boolean vaccinated = false;
     public boolean recovered = false;
     public boolean infected = false;
+    public boolean infected_main = false;
+    public boolean infected_gen1 = false;
+    public boolean infected_delta = false;
     public int no_infected_days = 0;
     public int immune_days = 0;
     public boolean died = false;
     public int infected_duration = 1400;
     private int vel_x = 0;
     private int vel_y = 0;
+
+    public int getVel_x() {
+        return vel_x;
+    }
+
+    public void setVel_x(int vel_x) {
+        this.vel_x = vel_x;
+    }
+
+    public int getVel_y() {
+        return vel_y;
+    }
+
+    public void setVel_y(int vel_y) {
+        this.vel_y = vel_y;
+    }
 
     public Person(int x, int y) {
         this.x = x;
@@ -63,14 +85,14 @@ public class Person {
             recoveredHostPopulation();
             immune = true;
         }
-        if (total_days > 1500 && recovered && vaccinated && !died) {
-            second_variant = true;
-        }
+//        if (total_days > 1500 && recovered && vaccinated && !died) {
+//            delta_variant = true;
+//        }
         if (immune) {
             if (immune_days++ == 70)
                 vaccinateHostPopulation();
         }
-        if (total_days > 1500 && !infected) {
+        if (total_days > 1500 && !infected_main && !infected_gen1 && !infected_delta) {
             vaccinated = true;
 
         }

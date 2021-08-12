@@ -2,7 +2,7 @@ package config;
 
 public class Helper {
     public static int getHeight(){
-        return 1000;
+        return 800;
     }
 
     public static int getWidth(){
