@@ -111,13 +111,16 @@ public class PopulationGraph extends Application {
         return areaChart;
     }
 
-    public static void showChartVirusEvolution(int infected, int population, int recovered, int vaccinated, int died, int days) {
-        Platform.runLater(() -> {
-            infectedSeries.getData().add(new XYChart.Data(String.valueOf(days), infected));
-            recoveredSeries.getData().add(new XYChart.Data(String.valueOf(days), recovered));
-            vaccinatedSeries.getData().add(new XYChart.Data(String.valueOf(days), vaccinated));
-            diedSeries.getData().add(new XYChart.Data(String.valueOf(days), died));
-        });
+    public static void showChartVirusEvolution(int infected, int population, int recovered, int vaccinated, int died, int hours) {
+        if (hours % 4 == 0) {
+            Platform.runLater(() -> {
+                int days = hours / 4;
+                infectedSeries.getData().add(new XYChart.Data(String.valueOf(days), infected));
+                recoveredSeries.getData().add(new XYChart.Data(String.valueOf(days), recovered));
+                vaccinatedSeries.getData().add(new XYChart.Data(String.valueOf(days), vaccinated));
+                diedSeries.getData().add(new XYChart.Data(String.valueOf(days), died));
+            });
+        }
     }
 
     public void showGenerationFitnessGraphForFirstVariant(List<Integer> generationFitnessList) {
