@@ -22,12 +22,15 @@ public class PopulationGraph extends Application {
     private static final XYChart.Series recoveredSeries = new XYChart.Series();
     private static final XYChart.Series diedSeries = new XYChart.Series();
     private static final XYChart.Series vaccinatedSeries = new XYChart.Series();
+    private static final XYChart.Series deltaSeries = new XYChart.Series();
+
+
 
     private Scene scene;
 
     @Override
     public void start(Stage stage) {
-        FlowPane pane = new FlowPane(createPopulationChart(), createFitnessChartVariantOne(), createFitnessChartVariantTwo());
+        FlowPane pane = new FlowPane(createPopulationChart(), createFitnessChartVariantOne(), createFitnessChartVariantTwo(), createDeltaVariantChart());
         stage.setTitle("Graphical Representation");
         scene = new Scene(pane, 600, 1000);
         stage.setScene(scene);
@@ -50,7 +53,7 @@ public class PopulationGraph extends Application {
         vaccinatedSeries.setName("Vaccinated");
         diedSeries.setName("Died");
 
-        areaChart.setPrefSize(600, 400);
+        areaChart.setPrefSize(600, 350);
         areaChart.setLegendSide(Side.TOP);
         areaChart.getData().addAll(infectedSeries);
         areaChart.getData().addAll(recoveredSeries);
@@ -70,7 +73,7 @@ public class PopulationGraph extends Application {
         areaChart.setTitle("Generation Fitness Graph for Variant One");
         fitnessOneSeries.setName("Generations");
 
-        areaChart.setPrefSize(600, 280);
+        areaChart.setPrefSize(600, 200);
         areaChart.setLegendSide(Side.TOP);
         areaChart.getData().addAll(fitnessOneSeries);
         return areaChart;
@@ -86,9 +89,25 @@ public class PopulationGraph extends Application {
         areaChart.setTitle("Generation Fitness Graph for Variant Two ");
         fitnessTwoSeries.setName("Generations");
 
-        areaChart.setPrefSize(600, 280);
+        areaChart.setPrefSize(600, 200);
         areaChart.setLegendSide(Side.TOP);
         areaChart.getData().addAll(fitnessTwoSeries);
+        return areaChart;
+    }
+
+    public AreaChart<String, Number> createDeltaVariantChart() {
+        final CategoryAxis xAxis = new CategoryAxis();
+        final NumberAxis yAxis = new NumberAxis();
+
+        xAxis.setLabel("Generations");
+        yAxis.setLabel("Fitness");
+        AreaChart<String, Number> areaChart = new AreaChart<>(xAxis, yAxis);
+        areaChart.setTitle("Generation Fitness Graph for Delta Variant ");
+        deltaSeries.setName("Generations");
+
+        areaChart.setPrefSize(600, 200);
+        areaChart.setLegendSide(Side.TOP);
+        areaChart.getData().addAll(deltaSeries);
         return areaChart;
     }
 
@@ -113,6 +132,14 @@ public class PopulationGraph extends Application {
         Platform.runLater(() -> {
             for (int i = 0; i < generationFitnessList.size(); i++) {
                 fitnessTwoSeries.getData().add(new XYChart.Data(String.valueOf(i), generationFitnessList.get(i)));
+            }
+        });
+    }
+
+    public void showDeltaVariant(List<Integer> generationFitnessList) {
+        Platform.runLater(() -> {
+            for (int i = 0; i < generationFitnessList.size(); i++) {
+                deltaSeries.getData().add(new XYChart.Data(String.valueOf(i), generationFitnessList.get(i)));
             }
         });
     }
