@@ -4,7 +4,6 @@ import config.Constant;
 import geneticAlgorithm.GeneticAlgorithm;
 import geneticAlgorithm.Virus;
 import model.Person;
-import model.PersonStatus;
 
 import javax.swing.*;
 import java.awt.*;
@@ -64,7 +63,7 @@ public class PopulationFrame extends JPanel implements ActionListener {
 //        p[1].no_infected_days = 1;
         for (int i = 0; i < 10; i++) {
             int rand = gen.nextInt(1000);
-            p[rand].status = PersonStatus.INFECTED;
+            p[rand].infected=true;
             p[rand].main_virus=true;
             p[rand].no_infected_days = 1;
 //            p[50].setVel_x(p[50].getVel_x() * 10);
@@ -173,7 +172,7 @@ public class PopulationFrame extends JPanel implements ActionListener {
                     k--;
                     continue;
                 }
-                p[rand].status = PersonStatus.INFECTED;
+                p[rand].infected=true;
                 p[rand].gen1_virus=true;
                 p[rand].no_infected_days = 1;
             }
@@ -185,7 +184,7 @@ public class PopulationFrame extends JPanel implements ActionListener {
                     k--;
                     continue;
                 }
-                p[rand].status = PersonStatus.INFECTED;
+                p[rand].infected=true;
                 p[rand].delta_variant=true;
                 p[rand].no_infected_days = 1;
             }
