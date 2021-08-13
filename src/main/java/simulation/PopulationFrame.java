@@ -85,7 +85,7 @@ public class PopulationFrame extends JPanel implements ActionListener {
             g.setFont(new Font("TimesRoman", Font.PLAIN, Constant.TEXT_HEIGHT));
             g.drawString("Naive", 25, Constant.TEXT_POSITION);
 
-            if ((p[i].infected_main && p[i].fitness <= firstVariantFitness) || p[i].main_virus) {
+            if (((p[i].infected_main && p[i].fitness <= firstVariantFitness ) || p[i].main_virus) && !p[i].delta_variant) {
                 g.setFont(new Font("TimesRoman", Font.PLAIN, Constant.TEXT_HEIGHT));
                 g.setColor(Color.red);
                 Color InfectedOneColor = Color.decode("#c0392b");
@@ -94,7 +94,7 @@ public class PopulationFrame extends JPanel implements ActionListener {
 
                 p[i].main_virus = true;
             }
-            if (((p[i].infected_gen1 && p[i].fitness < secondVariantFitness) || p[i].gen1_virus) && !p[i].main_virus) {
+            if (((p[i].infected_gen1 && p[i].fitness < secondVariantFitness) || p[i].gen1_virus) && !p[i].main_virus && !p[i].delta_variant) {
                 g.setFont(new Font("TimesRoman", Font.PLAIN, Constant.TEXT_HEIGHT));
                 Color InfectedTwoColor = Color.decode("#9b59b6");
                 g.setColor(InfectedTwoColor);
@@ -134,6 +134,7 @@ public class PopulationFrame extends JPanel implements ActionListener {
                 g.setColor(Midnight);
                 p[i].delta_variant = true;
                 p[i].recovered=false;
+                p[i].vaccinated=false;
                 g.drawString("Delta Variant", 800, Constant.TEXT_POSITION);
 
             }
