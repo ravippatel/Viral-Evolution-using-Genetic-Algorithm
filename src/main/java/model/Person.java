@@ -91,10 +91,10 @@ public class Person {
             if (immune_days++ == 70)
                 vaccinateHostPopulation();
         }
-        if (total_days > 1200 && !infected_main && !infected_gen1 && !infected_delta) {
+        /*if (total_days > 1200 && !infected_main && !infected_gen1 && !infected_delta) {
             vaccinated = true;
 
-        }
+        }*/
     }
 
     public void deathProbability() {

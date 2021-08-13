@@ -58,16 +58,11 @@ public class PopulationFrame extends JPanel implements ActionListener {
         firstVariantFitness = firstVariant.getFitness();
 
         System.out.println("first fitness"+ firstVariantFitness);
-//        p[1].status = PersonStatus.INFECTED;
-//        p[1].main_virus=true;
-//        p[1].no_infected_days = 1;
         for (int i = 0; i < 10; i++) {
             int rand = gen.nextInt(1000);
             p[rand].infected=true;
             p[rand].main_virus=true;
             p[rand].no_infected_days = 1;
-//            p[50].setVel_x(p[50].getVel_x() * 10);
-//            p[50].setVel_y(p[50].getVel_y() * 10);
         }
 
 
@@ -90,28 +85,6 @@ public class PopulationFrame extends JPanel implements ActionListener {
             g.setColor(NaiveColor);
             g.setFont(new Font("TimesRoman", Font.PLAIN, Constant.TEXT_HEIGHT));
             g.drawString("Naive", 25, Constant.TEXT_POSITION);
-//
-//            if (p[i].fitness <= 550) {
-//                g.setColor(NaiveColor);
-//                g.setFont(new Font("TimesRoman", Font.PLAIN, Constant.TEXT_HEIGHT));
-//                g.drawString("Naive", 25, Constant.TEXT_POSITION);
-//
-//            } else if (p[i].fitness <= 600) {
-//                // g.setColor(Color.gray.darker());
-//
-////                Color NaiveColor = Color.decode("#bdc3c7");
-//                g.setColor(NaiveColor);
-//            } else if (p[i].fitness <= 650) {
-//                //g.setColor(Color.gray.darker().darker());
-//
-////                Color NaiveColor = Color.decode("#bdc3c7");
-//                g.setColor(NaiveColor);
-//            } else if (p[i].fitness <= 700) {
-//                //g.setColor(Color.gray.darker().darker().darker());
-//
-////                Color NaiveColor = Color.decode("#bdc3c7");
-//                g.setColor(NaiveColor);
-//            }
 
             if ((p[i].infected_main && p[i].fitness <= firstVariantFitness) || p[i].main_virus ) {
                 g.setFont(new Font("TimesRoman", Font.PLAIN, Constant.TEXT_HEIGHT));
@@ -231,48 +204,6 @@ public class PopulationFrame extends JPanel implements ActionListener {
         }
         return infected;
     }
-//
-//    public int infected_main() {
-//        int infected = 0;
-//        for (int i = 0; i < population; i++) {
-//            if (p[i].infected_main) {
-//                infected++;
-//            }
-//            if (p[i].recovered) {
-//                infected--;
-//            }
-//        }
-//        return infected;
-//    }
-//
-//    public int infected_gen1() {
-//        int infected = 0;
-//        for (int i = 0; i < population; i++) {
-//            if (p[i].infected_gen1) {
-//                infected++;
-//            }
-//            if (p[i].recovered) {
-//                infected--;
-//            }
-//        }
-//        return infected;
-//    }
-//
-//    public int infected_delta() {
-//        int infected = 0;
-//        for (int i = 0; i < population; i++) {
-//            if (p[i].infected_delta) {
-//                infected++;
-//            }
-//            if (p[i].recovered) {
-//                infected--;
-//            }
-//        }
-//
-////        System.out.println("Infected: " + infected);
-//
-//        return infected;
-//    }
 
     public int totalRecovered() {
         int recovered = 0;
@@ -316,11 +247,11 @@ public class PopulationFrame extends JPanel implements ActionListener {
                 p[i].checkForImmunity(total_days);
             }
 
-            if (total_days == 350) {
+            if (total_days == 300) {
                 secondVariant = getNewVariant(firstVariant, 2);
                 secondVariantFitness = secondVariant.getFitness();
             }
-            if (total_days == 900) {
+            if (total_days == 1300) {
                 thirdVariant = getNewVariant(secondVariant, 3);
                 thirdVariantFitness = thirdVariant.getFitness();
             }
