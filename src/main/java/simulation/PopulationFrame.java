@@ -133,6 +133,7 @@ public class PopulationFrame extends JPanel implements ActionListener {
                 Color Midnight = Color.decode("#2c3e50");
                 g.setColor(Midnight);
                 p[i].delta_variant = true;
+                p[i].recovered=false;
                 g.drawString("Delta Variant", 800, Constant.TEXT_POSITION);
 
             }
