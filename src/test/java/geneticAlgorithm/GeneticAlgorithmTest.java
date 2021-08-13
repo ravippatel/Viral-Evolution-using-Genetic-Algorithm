@@ -1,6 +1,5 @@
 package geneticAlgorithm;
 
-import config.Constant;
 import org.junit.Assert;
 import org.junit.Test;
 import simulation.PopulationGraph;
@@ -28,7 +27,7 @@ public class GeneticAlgorithmTest {
         GeneticAlgorithm ga = new GeneticAlgorithm();
         VirusPopulation vP = new VirusPopulation();
         PopulationGraph pG = getMockPopulationGraph();
-        vP.initializePopulation(Constant.testPopulation);
+        vP.initializePopulation();
         ga.runGA(new Virus(), pG, 1);
         Assert.assertNotEquals(ga.getGenerationCount(), 1000);
     }
@@ -38,7 +37,7 @@ public class GeneticAlgorithmTest {
         GeneticAlgorithm ga = new GeneticAlgorithm();
         VirusPopulation vP = new VirusPopulation();
         PopulationGraph pG = getMockPopulationGraph();
-        vP.initializePopulation(Constant.testPopulation);
+        vP.initializePopulation();
         ga.runGA(new Virus(), pG, 1);
         Assert.assertFalse(ga.generationFitnessList.size() > 0);
     }

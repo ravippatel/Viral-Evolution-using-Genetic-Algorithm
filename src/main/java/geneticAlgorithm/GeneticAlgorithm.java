@@ -6,7 +6,10 @@ import simulation.PopulationGraph;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
+/*
+This file contains Genetic Algorithm steps like selection, crossover, mutation
+for selecting the fittest individual
+ */
 public class GeneticAlgorithm {
     final List<Integer> generationFitnessList = new ArrayList<>();
     public VirusPopulation virusPopulation = new VirusPopulation();
@@ -14,17 +17,17 @@ public class GeneticAlgorithm {
     private Virus secondFittest;
     private int generationCount = 0;
 
-
-    public GeneticAlgorithm(){
+    public GeneticAlgorithm() {
 
     }
+
     //Selection
     void selection() {
 
-        //Select the most fittest virus
+        //Select the fittest virus
         fittest = virusPopulation.getFittest();
 
-        //Select the second most fittest virus
+        //Select the second-fittest virus
         secondFittest = virusPopulation.getSecondFittest();
     }
 
@@ -95,42 +98,36 @@ public class GeneticAlgorithm {
         return generationCount;
     }
 
-    public void setGenerationCount(int generationCount) {
-        this.generationCount = generationCount;
-    }
+    public Virus runGA(Virus previousGen, PopulationGraph populationGraph, int variantNumber) {
 
-    public  Virus runGA(Virus previousGen, PopulationGraph populationGraph, int variantNumber) {
-       //
         Random rn = new Random();
-
-        //GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
 
         int gaFitness = previousGen != null ? previousGen.getFitness() : Constant.virusFitness;
 
         //Initialize host population
-        virusPopulation.initializePopulation(1000);
+        virusPopulation.initializePopulation();
 
         //Calculate fitness of each virus
         virusPopulation.calculateFitness();
 
         System.out.println("Generation: " + generationCount + " Fittest: " + virusPopulation.fittest);
         generationFitnessList.add(virusPopulation.fittest);
-        //While population gets an virus with maximum fitness
+        //While population gets a virus with maximum fitness
         while (virusPopulation.fittest < gaFitness) {
             ++generationCount;
 
             //Do selection
             selection();
 
-            //Do crossover
+            //Do cross over
             crossover();
 
             //Do mutation under a  probability
-            if (rn.nextInt()%30000 < 3) {
+            if (rn.nextInt() % 30000 < 3) {
                 mutation();
             }
 
-            //Add fittest offspring to population
+            //Add the fittest offspring to population
             addFittestOffspring();
 
             //Calculate new fitness value
@@ -140,25 +137,22 @@ public class GeneticAlgorithm {
             System.out.println("Generation: " + generationCount + " Fittest: " + virusPopulation.fittest);
         }
 
-        if(variantNumber==1){
+        if (variantNumber == 1) {
             populationGraph.showGenerationFitnessGraphForFirstVariant(new ArrayList<>(generationFitnessList));
-        }else if(variantNumber==2){
+        } else if (variantNumber == 2) {
             populationGraph.showGenerationFitnessGraphForSecondVariant(new ArrayList<>(generationFitnessList));
-        }else{
+        } else {
             populationGraph.showDeltaVariant(new ArrayList<>(generationFitnessList));
         }
 
-
-       // populationGraph.showGenerationFitnessGraph(new ArrayList<>(generationFitnessList));
-
         System.out.println("\nSolution found in generation: " + generationCount);
-        System.out.println("Fitness: "+virusPopulation.getFittest().getFitness());
+        System.out.println("Fitness: " + virusPopulation.getFittest().getFitness());
         System.out.print("Genes: ");
         for (int i = 0; i < 10; i++) {
             System.out.print(virusPopulation.getFittest().genes[i]);
         }
 
-        System.out.println("");
+        System.out.println();
 
         generationFitnessList.clear();
         generationCount = 0;

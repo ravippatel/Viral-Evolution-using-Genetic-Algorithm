@@ -11,29 +11,26 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Random;
 
+/* This file shows evolution of individuals displays naive, recovered, vaccinated,
+died, generations and delta variant.
+ */
+
 public class PopulationFrame extends JPanel implements ActionListener {
 
     private static int total_hours = 0;
-    private final Timer TM = new Timer(100, this);
     private final int height;
     private final int width;
-
 
     private final Random gen = new Random();
     private final GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
     private final int population = Constant.hostPopulation;
     private final Person[] p = new Person[population];
     private final Virus firstVariant;
-    private PopulationGraph populationGraph;
+    private final PopulationGraph populationGraph;
     private Virus secondVariant;
-    private Virus thirdVariant;
     private int firstVariantFitness = 0;
     private int secondVariantFitness = 1000;
     private int thirdVariantFitness = 1000;
-
-//    public void printPerson(Person p, int i) {
-//        System.out.print(i+"\t"+p.fitness+"\t"+p.actual_fitness+"\t"+p.main_virus +"\t"+p.gen1_virus +"\t"+p.infected_main+"\t"+p.infected_gen1);
-//    }
 
     public PopulationFrame(int width, int height, PopulationGraph populationGraph) {
         this.width = width;
@@ -63,8 +60,7 @@ public class PopulationFrame extends JPanel implements ActionListener {
             p[rand].main_virus = true;
             p[rand].no_infected_days = 1;
         }
-
-
+        Timer TM = new Timer(100, this);
         TM.start();
     }
 
@@ -85,7 +81,7 @@ public class PopulationFrame extends JPanel implements ActionListener {
             g.setFont(new Font("TimesRoman", Font.PLAIN, Constant.TEXT_HEIGHT));
             g.drawString("Naive", 25, Constant.TEXT_POSITION);
 
-            if (((p[i].infected_main && p[i].fitness <= firstVariantFitness ) || p[i].main_virus) && !p[i].delta_variant) {
+            if (((p[i].infected_main && p[i].fitness <= firstVariantFitness) || p[i].main_virus) && !p[i].delta_variant) {
                 g.setFont(new Font("TimesRoman", Font.PLAIN, Constant.TEXT_HEIGHT));
                 g.setColor(Color.red);
                 Color InfectedOneColor = Color.decode("#c0392b");
@@ -99,12 +95,10 @@ public class PopulationFrame extends JPanel implements ActionListener {
                 Color InfectedTwoColor = Color.decode("#9b59b6");
                 g.setColor(InfectedTwoColor);
                 g.drawString("Generation 2", 260, Constant.TEXT_POSITION);
-//                if(total_days>300)
                 p[i].gen1_virus = true;
             }
             if (p[i].recovered) {
                 g.setFont(new Font("TimesRoman", Font.PLAIN, Constant.TEXT_HEIGHT));
-                //g.setColor(Color.orange);
                 Color RecoveredColor = Color.decode("#e67e22");
                 g.setColor(RecoveredColor);
                 p[i].gen1_virus = false;
@@ -116,12 +110,10 @@ public class PopulationFrame extends JPanel implements ActionListener {
                 g.setFont(new Font("TimesRoman", Font.PLAIN, Constant.TEXT_HEIGHT));
                 Color VaccinatedColor = Color.decode("#2ecc71");
                 g.setColor(VaccinatedColor);
-                //g.setColor(Color.GREEN);
                 g.drawString("Vaccinated", 560, Constant.TEXT_POSITION);
             }
             if (p[i].died) {
                 g.setFont(new Font("TimesRoman", Font.PLAIN, Constant.TEXT_HEIGHT));
-                //g.setColor(Color.CYAN);
                 Color Belize = Color.decode("#3498db");
                 g.setColor(Belize);
                 p[i].can_move = false;
@@ -129,14 +121,12 @@ public class PopulationFrame extends JPanel implements ActionListener {
             }
             if (((p[i].infected_delta && p[i].fitness < thirdVariantFitness) || p[i].delta_variant) && !p[i].main_virus && !p[i].gen1_virus) {
                 g.setFont(new Font("TimesRoman", Font.PLAIN, Constant.TEXT_HEIGHT));
-                //g.setColor(Color.BLUE);
                 Color Midnight = Color.decode("#2c3e50");
                 g.setColor(Midnight);
                 p[i].delta_variant = true;
-                p[i].recovered=false;
-                p[i].vaccinated=false;
+                p[i].recovered = false;
+                p[i].vaccinated = false;
                 g.drawString("Delta Variant", 800, Constant.TEXT_POSITION);
-
             }
             g.fillOval(p[i].x, p[i].y, Constant.DOTS_SIZE, Constant.DOTS_SIZE);
         }
@@ -166,20 +156,15 @@ public class PopulationFrame extends JPanel implements ActionListener {
         }
     }
 
-    public void checkDistance() {
-        // compare each point to all the other points
+    public void checkDistanceAndInfect() {
         for (int i = 0; i < population; i++) {
             for (int j = i + 1; j < population; j++) {
                 int deltax = p[i].x - p[j].x;
                 int deltay = p[i].y - p[j].y;
                 double dist = Math.sqrt(deltax * deltax + deltay * deltay);
-                // if the distance between 2 points is small enough, and one of
-                // the Persons is totalInfected, then infect the other Person
                 if (dist <= Constant.INFECT_DISTANCE) {
                     if (p[j].main_virus) {
-//                        System.out.println(j+" infected "+i);
                         p[i].infected_main = true;
-//                        p[i].no_infected_days++;
                     }
                     if (p[j].gen1_virus)
                         p[i].infected_gen1 = true;
@@ -191,9 +176,6 @@ public class PopulationFrame extends JPanel implements ActionListener {
                     }
                     if (p[i].infected_gen1 || p[i].infected_main || p[i].infected_delta)
                         p[i].no_infected_days++;
-//                    if (p[j].delta_variant) {
-//                        p[j].infected = true;
-//                    }
                 }
             }
         }
@@ -218,9 +200,6 @@ public class PopulationFrame extends JPanel implements ActionListener {
             if (p[i].recovered) {
                 recovered++;
             }
-            //if(p[i].totalInfected){
-            //recovered--;
-            //}
         }
         return recovered;
     }
@@ -252,7 +231,7 @@ public class PopulationFrame extends JPanel implements ActionListener {
 
             for (int i = 0; i < population; i++) {
                 p[i].move();
-                p[i].checkForImmunity(total_hours);
+                p[i].checkForImmunity();
             }
 
             if (total_hours == 300) {
@@ -260,30 +239,14 @@ public class PopulationFrame extends JPanel implements ActionListener {
                 secondVariantFitness = secondVariant.getFitness();
             }
             if (total_hours == 1300) {
-                thirdVariant = getNewVariant(secondVariant, 3);
+                Virus thirdVariant = getNewVariant(secondVariant, 3);
                 thirdVariantFitness = thirdVariant.getFitness();
             }
-            checkDistance();
+            checkDistanceAndInfect();
             PopulationGraph.showChartVirusEvolution(infected(), population, totalRecovered(), totalVaccinated(), totalDied(), total_hours);
-//            System.out.println("Days: " + (total_days)+"\t"+firstNewVariantFitness+"\t"+secondNewVariantFitness);
-
-//            System.out.print("\n"+total_days+"\t");
-//            printPerson(p[0],0);
-//            System.out.print("\n"+total_days+"\t");
-//            printPerson(p[1],1);
-//            System.out.print("\n"+total_days+"\t");
-//            printPerson(p[2],2);
-//            System.out.print("\n"+total_days+"\t");
-//            printPerson(p[3],3);
 
             repaint();
-//            try {
-//                Thread.sleep(250);
-//            } catch (InterruptedException ex) {
-//                ex.printStackTrace();
-//            }
         }
-
     }
 
     public int getRandomFitness(int min, int max) {
@@ -300,6 +263,4 @@ public class PopulationFrame extends JPanel implements ActionListener {
     public Virus getNewVariant(Virus previousVariant, int variantNumber) {
         return geneticAlgorithm.runGA(previousVariant, populationGraph, variantNumber);
     }
-
-
 }
