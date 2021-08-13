@@ -1,13 +1,16 @@
 package geneticAlgorithm;
 
+/*
+This class deals with various operation on virus.
+ */
+
 class VirusPopulation {
 
-    int popSize = 10;
     Virus[] viruses = new Virus[10];
     int fittest = 0;
 
-    //Initialize virus population
-    public void initializePopulation(int size) {
+    //Initializing virus population
+    public void initializePopulation() {
         for (int i = 0; i < viruses.length; i++) {
             viruses[i] = new Virus();
         }
@@ -27,7 +30,7 @@ class VirusPopulation {
         return viruses[maxFitIndex];
     }
 
-    //Get the second most fittest virus
+    //Get the second-fittest virus
     public Virus getSecondFittest() {
         int maxFit1 = 0;
         int maxFit2 = 0;
@@ -42,7 +45,7 @@ class VirusPopulation {
         return viruses[maxFit2];
     }
 
-    //Get index of least fittest virus
+    //Get index of the least fit virus
     public int getLeastFittestIndex() {
         int minFitVal = Integer.MAX_VALUE;
         int minFitIndex = 0;
@@ -57,11 +60,9 @@ class VirusPopulation {
 
     //Calculate fitness of each virus
     public void calculateFitness() {
-
         for (int i = 0; i < viruses.length; i++) {
             viruses[i].calcFitness();
         }
         getFittest();
     }
-
 }

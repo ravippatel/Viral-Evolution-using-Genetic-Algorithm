@@ -3,8 +3,8 @@ package config;
 public class Constant {
 
     /*
-    * Configured constants
-    * */
+     * Configured constants
+     * */
 
     public static final int TEXT_POSITION = 35;
     public static final int TEXT_HEIGHT = 20;
@@ -15,10 +15,5 @@ public class Constant {
 
     public static final int hostPopulation = 1000;
     public static final int virusFitness = 550;
-
-    /*
-    * Constants for testing
-    * */
-    public static final int testPopulation = 10;
 
 }

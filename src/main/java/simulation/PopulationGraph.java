@@ -14,7 +14,10 @@ import javafx.stage.Stage;
 
 import java.util.List;
 
-
+/*
+This file creates chart/graph for various generation fitness and also displays set of series
+like infected, recovered, vaccinated, died and delta series.
+ */
 public class PopulationGraph extends Application {
     private static final XYChart.Series fitnessOneSeries = new XYChart.Series();
     private static final XYChart.Series fitnessTwoSeries = new XYChart.Series();
@@ -24,9 +27,19 @@ public class PopulationGraph extends Application {
     private static final XYChart.Series vaccinatedSeries = new XYChart.Series();
     private static final XYChart.Series deltaSeries = new XYChart.Series();
 
-
-
     private Scene scene;
+
+    public static void showChartVirusEvolution(int infected, int population, int recovered, int vaccinated, int died, int hours) {
+        if (hours % 4 == 0) {
+            Platform.runLater(() -> {
+                int days = hours / 4;
+                infectedSeries.getData().add(new XYChart.Data(String.valueOf(days), infected));
+                recoveredSeries.getData().add(new XYChart.Data(String.valueOf(days), recovered));
+                vaccinatedSeries.getData().add(new XYChart.Data(String.valueOf(days), vaccinated));
+                diedSeries.getData().add(new XYChart.Data(String.valueOf(days), died));
+            });
+        }
+    }
 
     @Override
     public void start(Stage stage) {
@@ -109,18 +122,6 @@ public class PopulationGraph extends Application {
         areaChart.setLegendSide(Side.TOP);
         areaChart.getData().addAll(deltaSeries);
         return areaChart;
-    }
-
-    public static void showChartVirusEvolution(int infected, int population, int recovered, int vaccinated, int died, int hours) {
-        if (hours % 4 == 0) {
-            Platform.runLater(() -> {
-                int days = hours / 4;
-                infectedSeries.getData().add(new XYChart.Data(String.valueOf(days), infected));
-                recoveredSeries.getData().add(new XYChart.Data(String.valueOf(days), recovered));
-                vaccinatedSeries.getData().add(new XYChart.Data(String.valueOf(days), vaccinated));
-                diedSeries.getData().add(new XYChart.Data(String.valueOf(days), died));
-            });
-        }
     }
 
     public void showGenerationFitnessGraphForFirstVariant(List<Integer> generationFitnessList) {
