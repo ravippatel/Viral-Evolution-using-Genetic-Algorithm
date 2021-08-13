@@ -142,8 +142,10 @@ public class GeneticAlgorithm {
 
         if(variantNumber==1){
             populationGraph.showGenerationFitnessGraphForFirstVariant(new ArrayList<>(generationFitnessList));
-        }else{
+        }else if(variantNumber==2){
             populationGraph.showGenerationFitnessGraphForSecondVariant(new ArrayList<>(generationFitnessList));
+        }else{
+            populationGraph.showDeltaVariant(new ArrayList<>(generationFitnessList));
         }
 
 

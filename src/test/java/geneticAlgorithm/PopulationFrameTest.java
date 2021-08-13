@@ -21,7 +21,7 @@ public class PopulationFrameTest {
         PopulationGraph populationGraph=TestHelper.getMockPopulationGraph();
         PopulationFrame pf=new PopulationFrame(1000,1000, populationGraph);
 
-        assertEquals(1,pf.infected());
+        assertEquals(0,pf.infected());
     }
 
     @Test
