@@ -39,6 +39,7 @@ A simulation is the imitation of the operation of a real-world process or system
 #### Project - Overview 
 Our objective is to study the evolution of variants of the SARS-CoV-2 virus having a genome consisting of almost 30,000 bases (i.e. A, C, G, or T) with 10 individual genes, on these potential hosts will be either (a) naive (i.e. not infected, not vaccinated), (b) previously infected, (c) vaccinated, (d) previously infected and vaccinated. Implementing the genetic algorithm to evolve new variants and simulating the virus evolution on the host population. And to simulate the virus transmission of SARS-CoV-2, the pathogen behind COVID-19. The simulations take into account different measures taken throughout the pandemic including no restrictions, lockdown, quarantine, social distancing, mask-wearing, testing, and vaccinations.
 
+![image](https://user-images.githubusercontent.com/59711399/129432073-c3e0251b-65d8-4d92-98ab-570ce4fd4a42.png)
 
 
 
